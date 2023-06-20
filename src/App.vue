@@ -1,47 +1,127 @@
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+<script setup>
+import { ref, computed, watchEffect } from 'vue'
+
+const STORAGE_KEY = 'vue-todomvc'
+
+const filters = {
+  all: (todos) => todos,
+  active: (todos) => todos.filter((todo) => !todo.completed),
+  completed: (todos) => todos.filter((todo) => todo.completed)
+}
+
+// state
+const todos = ref(JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'))
+const visibility = ref('all')
+const editedTodo = ref()
+
+// derived state
+const filteredTodos = computed(() => filters[visibility.value](todos.value))
+const remaining = computed(() => filters.active(todos.value).length)
+
+// handle routing
+window.addEventListener('hashchange', onHashChange)
+onHashChange()
+
+// persist state
+watchEffect(() => {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(todos.value))
+})
+
+function addTodo(e) {
+  const value = e.target.value.trim()
+  if (value) {
+    todos.value.push({
+      id: Date.now(),
+      title: value,
+      completed: false
+    })
+    e.target.value = ''
+  }
+}
+
+let beforeEditCache = ''
+function editTodo(todo) {
+  beforeEditCache = todo.title
+  editedTodo.value = todo
+}
+
+function cancelEdit(todo) {
+  editedTodo.value = null
+  todo.title = beforeEditCache
+}
+
+function doneEdit(todo) {
+  if (editedTodo.value) {
+    editedTodo.value = null
+    todo.title = todo.title.trim()
+    if (!todo.title) removeTodo(todo)
+  }
+}
+
+function onHashChange() {
+  const route = window.location.hash.replace(/#\/?/, '')
+  if (filters[route]) {
+    visibility.value = route
+  } else {
+    window.location.hash = ''
+    visibility.value = 'all'
+  }
+}
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  <section class="workout-app">
+    <header class="header">
+      <h1>Workout Tracker</h1>
+      <input
+        class="new-workout"
+        placeholder="Add a workout"
+        @keyup.enter="addTodo"
+      >
+    </header>
+    <section class="main" >
+      <ul class="todo-list">
+        <li
+          v-for="todo in filteredTodos"
+          class="todo"
+          :key="todo.id"
+          :class="{ completed: todo.completed, editing: todo === editedTodo }"
+        >
+          <div class="view">
+            <label @dblclick="editTodo(todo)">{{ todo.title }}</label>
+          </div>
+          <input
+            v-if="todo === editedTodo"
+            class="edit"
+            type="text"
+            v-model="todo.title"
+            @vnode-mounted="({ el }) => el.focus()"
+            @blur="doneEdit(todo)"
+            @keyup.enter="doneEdit(todo)"
+            @keyup.escape="cancelEdit(todo)"
+          >
+        </li>
+      </ul>
+    </section>
+    <footer class="footer" v-show="todos.length">
+      <span class="todo-count">
+        <strong>{{ remaining }}</strong>
+        <span>{{ remaining === 1 ? ' workout' : ' workouts' }}</span>
+      </span>
+      <ul class="filters">
+        <li>
+          <a href="#/all" :class="{ selected: visibility === 'all' }">All</a>
+        </li>
+        <li>
+          <a href="#/active" :class="{ selected: visibility === 'active' }">Active</a>
+        </li>
+        <li>
+          <a href="#/completed" :class="{ selected: visibility === 'completed' }">Archived</a>
+        </li>
+      </ul>
+    </footer>
+  </section>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
+<style>
 </style>
