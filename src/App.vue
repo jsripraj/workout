@@ -1,127 +1,53 @@
 <script setup>
-import { ref, computed, watchEffect } from 'vue'
+import { ref, watchEffect } from 'vue'
+import Home from './components/Home.vue'
+import Tracker from './components/Tracker.vue'
 
-const STORAGE_KEY = 'vue-todomvc'
+const STORAGE_KEY = 'vue-workoutmvc'
 
-const filters = {
-  all: (todos) => todos,
-  active: (todos) => todos.filter((todo) => !todo.completed),
-  completed: (todos) => todos.filter((todo) => todo.completed)
+const pageTypes = {
+    Home: 'home',
+    Tracker: 'tracker'
 }
 
-// state
-const todos = ref(JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'))
-const visibility = ref('all')
-const editedTodo = ref()
+const appState = {
+    page: ref(pageTypes.Home),
+    workouts: ref(JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'))
+}
 
-// derived state
-const filteredTodos = computed(() => filters[visibility.value](todos.value))
-const remaining = computed(() => filters.active(todos.value).length)
+const trackerState = {
+    title: ""
+}
 
-// handle routing
-window.addEventListener('hashchange', onHashChange)
-onHashChange()
-
-// persist state
+// persist state -- eventually this will be stored in database
 watchEffect(() => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(todos.value))
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(appState.workouts.value))
 })
 
-function addTodo(e) {
-  const value = e.target.value.trim()
+function addWorkout(value) {
   if (value) {
-    todos.value.push({
+    appState.workouts.value.push({
       id: Date.now(),
       title: value,
-      completed: false
     })
-    e.target.value = ''
   }
 }
 
-let beforeEditCache = ''
-function editTodo(todo) {
-  beforeEditCache = todo.title
-  editedTodo.value = todo
+function openTracker(workout) {
+    console.log(`workout = ${JSON.stringify(workout)}`)
+    appState.page.value = pageTypes.Tracker
+    trackerState.title = workout.title
 }
 
-function cancelEdit(todo) {
-  editedTodo.value = null
-  todo.title = beforeEditCache
-}
-
-function doneEdit(todo) {
-  if (editedTodo.value) {
-    editedTodo.value = null
-    todo.title = todo.title.trim()
-    if (!todo.title) removeTodo(todo)
-  }
-}
-
-function onHashChange() {
-  const route = window.location.hash.replace(/#\/?/, '')
-  if (filters[route]) {
-    visibility.value = route
-  } else {
-    window.location.hash = ''
-    visibility.value = 'all'
-  }
-}
 </script>
 
 <template>
-  <section class="workout-app">
-    <header class="header">
-      <h1>Workout Tracker</h1>
-      <input
-        class="new-workout"
-        placeholder="Add a workout"
-        @keyup.enter="addTodo"
-      >
-    </header>
-    <section class="main" >
-      <ul class="todo-list">
-        <li
-          v-for="todo in filteredTodos"
-          class="todo"
-          :key="todo.id"
-          :class="{ completed: todo.completed, editing: todo === editedTodo }"
-        >
-          <div class="view">
-            <label @dblclick="editTodo(todo)">{{ todo.title }}</label>
-          </div>
-          <input
-            v-if="todo === editedTodo"
-            class="edit"
-            type="text"
-            v-model="todo.title"
-            @vnode-mounted="({ el }) => el.focus()"
-            @blur="doneEdit(todo)"
-            @keyup.enter="doneEdit(todo)"
-            @keyup.escape="cancelEdit(todo)"
-          >
-        </li>
-      </ul>
-    </section>
-    <footer class="footer" v-show="todos.length">
-      <span class="todo-count">
-        <strong>{{ remaining }}</strong>
-        <span>{{ remaining === 1 ? ' workout' : ' workouts' }}</span>
-      </span>
-      <ul class="filters">
-        <li>
-          <a href="#/all" :class="{ selected: visibility === 'all' }">All</a>
-        </li>
-        <li>
-          <a href="#/active" :class="{ selected: visibility === 'active' }">Active</a>
-        </li>
-        <li>
-          <a href="#/completed" :class="{ selected: visibility === 'completed' }">Archived</a>
-        </li>
-      </ul>
-    </footer>
-  </section>
+    <Home v-if="appState.page.value === pageTypes.Home"
+        :workouts="appState.workouts.value" 
+        @add-workout="addWorkout" 
+        @click-workout="openTracker"
+    />
+    <Tracker v-else-if="appState.page.value === pageTypes.Tracker"
+        :title="trackerState.title"
+    />
 </template>
-
-<style>
-</style>
