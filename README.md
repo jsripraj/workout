@@ -1,6 +1,6 @@
 # workout
 
-This template should help get you started developing with Vue 3 in Vite.
+Like many people, I want to track my workouts so I can see the progress (or lack thereof) I have made over time. However, tracking this information in a notes app or a spreadsheet is too tedious. So, I'm creating this application to make workout tracking as easy and user-friendly as possible.
 
 ## Recommended IDE Setup
 
