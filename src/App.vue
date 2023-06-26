@@ -3,8 +3,6 @@ import { ref, watchEffect } from 'vue'
 import Home from './components/Home.vue'
 import Tracker from './components/Tracker.vue'
 
-const STORAGE_KEY = 'vue-workoutmvc'
-
 const pageTypes = {
     Home: 'home',
     Tracker: 'tracker'
@@ -12,16 +10,21 @@ const pageTypes = {
 
 const appState = {
     page: ref(pageTypes.Home),
-    workouts: ref(JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'))
+    workouts: ref(JSON.parse(localStorage.getItem('workouts') || '[]'))
 }
 
 const trackerState = {
-    title: ""
+    title: "",
+    exercises: ref(JSON.parse(localStorage.getItem('exercises') || '[]'))
 }
 
 // persist state -- eventually this will be stored in database
 watchEffect(() => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(appState.workouts.value))
+  localStorage.setItem('workouts', JSON.stringify(appState.workouts.value))
+})
+
+watchEffect(() => {
+  localStorage.setItem('exericses', JSON.stringify(trackerState.exercises.value))
 })
 
 function addWorkout(value) {
@@ -33,10 +36,24 @@ function addWorkout(value) {
   }
 }
 
+function addExercise(value) {
+  if (value) {
+    trackerState.exercises.value.push({
+      id: Date.now(),
+      title: value,
+    })
+  }
+}
+
 function openTracker(workout) {
-    console.log(`workout = ${JSON.stringify(workout)}`)
-    appState.page.value = pageTypes.Tracker
-    trackerState.title = workout.title
+  console.log(`workout = ${JSON.stringify(workout)}`)
+  appState.page.value = pageTypes.Tracker
+  trackerState.title = workout.title
+}
+
+function closeTracker() {
+  console.log(`called closeTracker`)
+  appState.page.value = pageTypes.Home
 }
 
 </script>
@@ -49,5 +66,8 @@ function openTracker(workout) {
     />
     <Tracker v-else-if="appState.page.value === pageTypes.Tracker"
         :title="trackerState.title"
+        :exercises="trackerState.exercises.value"
+        @click-back="closeTracker"
+        @add-exercise="addExercise"
     />
 </template>
