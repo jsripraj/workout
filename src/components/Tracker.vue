@@ -7,7 +7,9 @@
   const emit = defineEmits([
     'click-back', 
     'addExercise', 
-    'delExercise'
+    'delExercise',
+    'moveExerciseUp',
+    'moveExerciseDown',
   ])
 
   const editing = ref(false)
@@ -41,6 +43,8 @@
                 type="text"
                 v-model="x.name"
               >
+              <button @click="$emit('moveExerciseUp', x)">Up</button>
+              <button @click="$emit('moveExerciseDown', x)">Down</button>
               <button @click="$emit('delExercise', x)">x</button>
             </div>
             <div v-else>

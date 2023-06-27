@@ -14,12 +14,6 @@ const appState = {
     trackedWorkout: ref(),
 }
 
-// persist state -- eventually this will be stored in database
-watchEffect(() => {
-  localStorage.setItem('workouts', JSON.stringify(appState.workouts.value))
-  // localStorage.setItem('workouts', JSON.stringify([]))
-})
-
 class Workout {
   constructor(name) {
     this.name = name
@@ -33,24 +27,25 @@ class Exercise {
   }
 }
 
-function addWorkout(woName) {
-  if (woName) {
-    appState.workouts.value.push(new Workout(woName))
-    console.log(`workouts: ${JSON.stringify(appState.workouts.value)}`);
-  }
-}
+// persist state -- eventually this will be stored in database
+watchEffect(() => {
+  localStorage.setItem('workouts', JSON.stringify(appState.workouts.value))
+  // localStorage.setItem('workouts', JSON.stringify([]))
+})
 
 function addExercise(exName) {
   if (exName) {
-    console.log('called addExercise in App.vue')
-    console.log(`workouts before: ${JSON.stringify(appState.workouts.value)}`);
     appState.trackedWorkout.value.exercises.push(new Exercise(exName))
-    console.log(`workouts after: ${JSON.stringify(appState.workouts.value)}`);
+  }
+}
+
+function addWorkout(woName) {
+  if (woName) {
+    appState.workouts.value.push(new Workout(woName))
   }
 }
 
 function delExercise(exercise) {
-  console.log(`called delExericse with exercise ${exercise}`)
   let i = 0
   for (const x of appState.trackedWorkout.value.exercises) {
     if (x === exercise) {
@@ -72,17 +67,27 @@ function delWorkout(workout) {
   }
 }
 
-function moveWorkoutUp(workout) {
-  for (let i = 0; i < appState.workouts.value.length; i++) {
-    if (appState.workouts.value[i] === workout) {
-      if (i > 0) {
-        let t = appState.workouts.value[i]
-        appState.workouts.value[i] = appState.workouts.value[i-1]
-        appState.workouts.value[i-1] = t
-      }
+function moveExerciseDown(exercise) {
+  for (let i = 0; i < appState.trackedWorkout.value.exercises.length - 1; i++) {
+    if (appState.trackedWorkout.value.exercises[i] === exercise) {
+      let t = appState.trackedWorkout.value.exercises[i]
+      appState.trackedWorkout.value.exercises[i] = appState.trackedWorkout.value.exercises[i+1]
+      appState.trackedWorkout.value.exercises[i+1] = t
       break
     }
   }
+}
+
+function moveExerciseUp(exercise) {
+  for (let i = 1; i < appState.trackedWorkout.value.exercises.length; i++) {
+    if (appState.trackedWorkout.value.exercises[i] === exercise) {
+      let t = appState.trackedWorkout.value.exercises[i]
+      appState.trackedWorkout.value.exercises[i] = appState.trackedWorkout.value.exercises[i-1]
+      appState.trackedWorkout.value.exercises[i-1] = t
+      break
+    }
+  }
+
 }
 
 function moveWorkoutDown(workout) {
@@ -98,14 +103,25 @@ function moveWorkoutDown(workout) {
   }
 }
 
+function moveWorkoutUp(workout) {
+  for (let i = 0; i < appState.workouts.value.length; i++) {
+    if (appState.workouts.value[i] === workout) {
+      if (i > 0) {
+        let t = appState.workouts.value[i]
+        appState.workouts.value[i] = appState.workouts.value[i-1]
+        appState.workouts.value[i-1] = t
+      }
+      break
+    }
+  }
+}
+
 function openTracker(workout) {
-  console.log(`workout = ${JSON.stringify(workout)}`)
   appState.page.value = pageTypes.Tracker
   appState.trackedWorkout.value = workout
 }
 
 function closeTracker() {
-  console.log(`called closeTracker`)
   appState.page.value = pageTypes.Home
   appState.trackedWorkout.value = null
 }
@@ -126,5 +142,7 @@ function closeTracker() {
         @click-back="closeTracker"
         @add-exercise="addExercise"
         @del-exercise="delExercise"
+        @move-exercise-up="moveExerciseUp"
+        @move-exercise-down="moveExerciseDown"
     />
 </template>
