@@ -50,6 +50,11 @@ function addExercise(exName) {
   }
 }
 
+function delExercise(exercise) {
+  console.log(`called delExericse with exercise ${exercise}`)
+  delete appState.workouts.value[appState.trackedWorkout.value].exercises[exercise.name]
+}
+
 function openTracker(workout) {
   console.log(`workout = ${JSON.stringify(workout)}`)
   appState.page.value = pageTypes.Tracker
@@ -74,5 +79,6 @@ function closeTracker() {
         :workout = "appState.workouts.value[appState.trackedWorkout.value]"
         @click-back="closeTracker"
         @add-exercise="addExercise"
+        @del-exercise="delExercise"
     />
 </template>
