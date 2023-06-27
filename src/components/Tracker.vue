@@ -9,7 +9,7 @@
   const editing = ref(false)
 
   const editBtnMsg = computed(() => {
-    return editing.value ? 'Save' : 'Edit'
+    return editing.value ? 'Done' : 'Edit'
   })
 
   function addExercise(e) {
@@ -32,9 +32,15 @@
           <li
             v-for="x in workout.exercises"
           >
-            <div>
+            <div v-if="editing">
+              <input
+                type="text"
+                v-model="x.name"
+              >
+              <button @click="$emit('delExercise', x)">x</button>
+            </div>
+            <div v-else>
               <label>{{ x.name }}</label>
-              <button v-if="editing" @click="$emit('delExercise', x)">x</button>
             </div>
           </li>
       </ul>
