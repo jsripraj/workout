@@ -10,50 +10,56 @@ const pageTypes = {
 
 const appState = {
     page: ref(pageTypes.Home),
-    workouts: ref(JSON.parse(localStorage.getItem('workouts') || '[]'))
-}
-
-const trackerState = {
-    title: "",
-    exercises: ref(JSON.parse(localStorage.getItem('exercises') || '[]'))
+    workouts: ref(JSON.parse(localStorage.getItem('workouts') || '{}')),
+    trackedWorkout: ref(""),
 }
 
 // persist state -- eventually this will be stored in database
 watchEffect(() => {
   localStorage.setItem('workouts', JSON.stringify(appState.workouts.value))
+  // localStorage.setItem('workouts', JSON.stringify({}))
 })
 
-watchEffect(() => {
-  localStorage.setItem('exericses', JSON.stringify(trackerState.exercises.value))
-})
-
-function addWorkout(value) {
-  if (value) {
-    appState.workouts.value.push({
-      id: Date.now(),
-      title: value,
-    })
+class Workout {
+  constructor(name) {
+    this.name = name;
+    this.exercises = new Object();
   }
 }
 
-function addExercise(value) {
-  if (value) {
-    trackerState.exercises.value.push({
-      id: Date.now(),
-      title: value,
-    })
+class Exercise {
+  constructor(name) {
+    this.name = name;
+  }
+}
+
+function addWorkout(woName) {
+  if (woName) {
+    appState.workouts.value[woName] = new Workout(woName);
+    console.log(`workouts: ${JSON.stringify(appState.workouts.value)}`);
+  }
+}
+
+function addExercise(exName) {
+  if (exName) {
+    console.log('called addExercise in App.vue')
+    console.log(`workouts before: ${JSON.stringify(appState.workouts.value)}`);
+    let workout = appState.workouts.value[appState.trackedWorkout.value]
+    workout.exercises[exName] = new Exercise(exName)
+    console.log(`workouts after: ${JSON.stringify(appState.workouts.value)}`);
   }
 }
 
 function openTracker(workout) {
   console.log(`workout = ${JSON.stringify(workout)}`)
   appState.page.value = pageTypes.Tracker
-  trackerState.title = workout.title
+  appState.trackedWorkout.value = workout.name
 }
 
 function closeTracker() {
   console.log(`called closeTracker`)
   appState.page.value = pageTypes.Home
+  appState.trackedWorkout.value = ""
 }
 
 </script>
@@ -65,8 +71,7 @@ function closeTracker() {
         @click-workout="openTracker"
     />
     <Tracker v-else-if="appState.page.value === pageTypes.Tracker"
-        :title="trackerState.title"
-        :exercises="trackerState.exercises.value"
+        :workout = "appState.workouts.value[appState.trackedWorkout.value]"
         @click-back="closeTracker"
         @add-exercise="addExercise"
     />

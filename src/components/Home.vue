@@ -21,16 +21,14 @@ function addWorkout(e) {
       >
     </header>
     <section class="main" >
-        <ul class="workout-list">
-            <li
-              v-for="workout in workouts"
-              class="workout"
-              :key="workout.id"
-              @click="$emit('clickWorkout', workout)"
-            >
-              {{ workout.title }}
-            </li>
-        </ul>
+      <ul>
+        <li
+          v-for="workout in workouts"
+          @click="$emit('clickWorkout', workout)"
+        >
+          {{ workout.name }}
+        </li>
+      </ul>
     </section>
   </section>
 </template>

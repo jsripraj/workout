@@ -1,5 +1,5 @@
 <script setup>
-  defineProps(['title', 'exercises'])
+  defineProps(['workout'])
   const emit = defineEmits(['click-back', 'addExercise'])
 
   function addExercise(e) {
@@ -13,16 +13,14 @@
   <section class="workout-app">
     <header class="header">
       <button @click="$emit('click-back')">Back</button>
-      <h1>{{ title }}</h1>
+      <h1>{{ workout.name }}</h1>
     </header>
     <section class="main" >
       <ul class="exercise-list">
           <li
-            v-for="ex in exercises"
-            class="exercise"
-            :key="ex.id"
+            v-for="x in workout.exercises"
           >
-            {{ ex.title }}
+            {{ x.name }}
           </li>
       </ul>
       <input
