@@ -55,6 +55,10 @@ function delExercise(exercise) {
   delete appState.workouts.value[appState.trackedWorkout.value].exercises[exercise.name]
 }
 
+function delWorkout(workout) {
+  delete appState.workouts.value[workout.name]
+}
+
 function openTracker(workout) {
   console.log(`workout = ${JSON.stringify(workout)}`)
   appState.page.value = pageTypes.Tracker
@@ -74,6 +78,7 @@ function closeTracker() {
         :workouts="appState.workouts.value" 
         @add-workout="addWorkout" 
         @click-workout="openTracker"
+        @del-workout="delWorkout"
     />
     <Tracker v-else-if="appState.page.value === pageTypes.Tracker"
         :workout = "appState.workouts.value[appState.trackedWorkout.value]"
