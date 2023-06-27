@@ -4,7 +4,13 @@ import { ref, computed } from 'vue'
 
 defineProps(['workouts'])
 
-const emit = defineEmits(['addWorkout', 'clickWorkout', 'delWorkout'])
+const emit = defineEmits([
+  'addWorkout', 
+  'clickWorkout', 
+  'delWorkout', 
+  'moveWorkoutUp', 
+  'moveWorkoutDown'
+])
 
 const editing = ref(false)
 
@@ -36,6 +42,8 @@ function addWorkout(e) {
               type="text"
               v-model="workout.name"
             >
+            <button @click="$emit('moveWorkoutUp', workout)">Up</button>
+            <button @click="$emit('moveWorkoutDown', workout)">Down</button>
             <button @click="$emit('delWorkout', workout)">x</button>
           </div>
           <div v-else>

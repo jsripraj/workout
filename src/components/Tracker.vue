@@ -4,7 +4,11 @@
 
   defineProps(['workout'])
 
-  const emit = defineEmits(['click-back', 'addExercise', 'delExercise'])
+  const emit = defineEmits([
+    'click-back', 
+    'addExercise', 
+    'delExercise'
+  ])
 
   const editing = ref(false)
 
