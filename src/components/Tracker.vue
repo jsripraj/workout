@@ -1,6 +1,6 @@
 <script setup>
 
-  import { ref } from 'vue'
+  import { ref, computed } from 'vue'
 
   defineProps(['workout'])
 
@@ -8,14 +8,15 @@
 
   const editing = ref(false)
 
+  const editBtnMsg = computed(() => {
+    return editing.value ? 'Save' : 'Edit'
+  })
+
   function addExercise(e) {
     const value = e.target.value.trim()
     e.target.value = ''
     emit('addExercise', value)
   }
-
-
-  
 
 </script>
 
@@ -24,7 +25,7 @@
     <header class="header">
       <button @click="$emit('click-back')">Back</button>
       <h1>{{ workout.name }}</h1>
-      <button @click="editing=true">Edit</button>
+      <button @click="editing = !editing">{{ editBtnMsg }}</button>
     </header>
     <section class="main" >
       <ul class="exercise-list">
