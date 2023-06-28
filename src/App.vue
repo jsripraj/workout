@@ -50,7 +50,17 @@ function addExercise(exName) {
 }
 
 function addSet(exercise) {
-  exercise.sets.push(new Set(`Set ${exercise.sets.length + 1}`))
+  exercise.sets.push(new Set(`${exercise.sets.length + 1}`))
+}
+
+function delSet(exercise, set) {
+  for (let i = 0; i < exercise.sets.length; i++) {
+    if (exercise.sets[i] === set) {
+      exercise.sets.splice(i, 1)
+      break
+    }
+  }
+
 }
 
 function addWorkout(woName) {
@@ -159,5 +169,6 @@ function closeTracker() {
         @move-exercise-up="moveExerciseUp"
         @move-exercise-down="moveExerciseDown"
         @add-set="addSet"
+        @del-set="delSet"
     />
 </template>

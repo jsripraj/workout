@@ -11,6 +11,7 @@
     'moveExerciseUp',
     'moveExerciseDown',
     'addSet',
+    'delSet',
   ])
 
   const editing = ref(false)
@@ -62,7 +63,20 @@
               <h3>{{ x.name }}</h3>
               <ul>
                 <li v-for="set in x.sets">
-                  {{ set.name }} &nbsp; {{ `Weight: ${set.weight} lbs` }}
+                  Set {{ set.name }}
+                  <input
+                    type="text"
+                    v-model="set.weight"
+                    placeholder="0"
+                  >
+                  <label>lbs </label>
+                  <input
+                    type="text"
+                    v-model="set.reps"
+                    placeholder="0"
+                  >
+                  <label>reps </label>
+                  <button @click="$emit('delSet', x, set)">x</button>
                 </li>
               </ul>
               <button @click="$emit('addSet', x)">Add New Set</button>
