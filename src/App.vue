@@ -17,13 +17,23 @@ const appState = {
 class Workout {
   constructor(name) {
     this.name = name
+    this.description = "Sample description describes the workout and any notes the user wants to include"
     this.exercises = []
   }
 }
 
 class Exercise {
   constructor(name) {
-    this.name = name;
+    this.name = name
+    this.sets = []
+  }
+}
+
+class Set {
+  constructor(name, weight=0, reps=0) {
+    this.name = name
+    this.weight = weight
+    this.reps = reps
   }
 }
 
@@ -37,6 +47,10 @@ function addExercise(exName) {
   if (exName) {
     appState.trackedWorkout.value.exercises.push(new Exercise(exName))
   }
+}
+
+function addSet(exercise) {
+  exercise.sets.push(new Set(`Set ${exercise.sets.length + 1}`))
 }
 
 function addWorkout(woName) {
@@ -144,5 +158,6 @@ function closeTracker() {
         @del-exercise="delExercise"
         @move-exercise-up="moveExerciseUp"
         @move-exercise-down="moveExerciseDown"
+        @add-set="addSet"
     />
 </template>

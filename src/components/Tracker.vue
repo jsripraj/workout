@@ -10,12 +10,13 @@
     'delExercise',
     'moveExerciseUp',
     'moveExerciseDown',
+    'addSet',
   ])
 
   const editing = ref(false)
 
   const editBtnMsg = computed(() => {
-    return editing.value ? 'Done' : 'Edit'
+    return editing.value ? 'Done' : 'Edit Details'
   })
 
   function addExercise(e) {
@@ -31,6 +32,16 @@
     <header class="header">
       <button @click="$emit('click-back')">Back</button>
       <h1>{{ workout.name }}</h1>
+      <div v-if="editing">
+        <input
+          type="text"
+          placeholder="Add a description"
+          v-model="workout.description"
+        >
+      </div>
+      <div v-else>
+        <p>{{ workout.description }}</p>
+      </div>
       <button @click="editing = !editing">{{ editBtnMsg }}</button>
     </header>
     <section class="main" >
@@ -48,7 +59,13 @@
               <button @click="$emit('delExercise', x)">x</button>
             </div>
             <div v-else>
-              <label>{{ x.name }}</label>
+              <h3>{{ x.name }}</h3>
+              <ul>
+                <li v-for="set in x.sets">
+                  {{ set.name }} &nbsp; {{ `Weight: ${set.weight} lbs` }}
+                </li>
+              </ul>
+              <button @click="$emit('addSet', x)">Add New Set</button>
             </div>
           </li>
       </ul>
