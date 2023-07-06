@@ -153,6 +153,7 @@ function closeTracker() {
 </script>
 
 <template>
+  <div class="container">
     <Home v-if="appState.page.value === pageTypes.Home"
         :workouts="appState.workouts.value" 
         @add-workout="addWorkout" 
@@ -171,4 +172,5 @@ function closeTracker() {
         @add-set="addSet"
         @del-set="delSet"
     />
+  </div>
 </template>

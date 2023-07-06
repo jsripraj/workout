@@ -27,37 +27,35 @@ function addWorkout(e) {
 </script>
 
 <template>
-  <section class="workout-app">
+  <div class="container text-center">
     <header class="header">
       <h1>Workout Tracker</h1>
     </header>
     <section class="main" >
-      <button @click="editing = !editing">{{ editBtnMsg }}</button>
-      <ul>
-        <li
-          v-for="workout in workouts"
+      <div v-for="workout in workouts">
+        <div v-if="editing">
+          <input type="text" v-model="workout.name">
+          <button @click="$emit('moveWorkoutUp', workout)">&#8679</button>
+          <button @click="$emit('moveWorkoutDown', workout)">&#8681</button>
+          <button @click="$emit('delWorkout', workout)">X</button>
+        </div>
+        <div v-else>
+          <h2 @click="$emit('clickWorkout', workout)">{{ workout.name }}</h2>
+        </div>
+      </div>
+      
+      <div class="row">
+        <input
+          class="new-workout"
+          placeholder="Add a workout"
+          @keyup.enter="addWorkout"
         >
-          <div v-if="editing">
-            <input
-              type="text"
-              v-model="workout.name"
-            >
-            <button @click="$emit('moveWorkoutUp', workout)">Up</button>
-            <button @click="$emit('moveWorkoutDown', workout)">Down</button>
-            <button @click="$emit('delWorkout', workout)">x</button>
-          </div>
-          <div v-else>
-            <label @click="$emit('clickWorkout', workout)">{{ workout.name }}</label>
-          </div>
-        </li>
-      </ul>
-      <input
-        class="new-workout"
-        placeholder="Add a workout"
-        @keyup.enter="addWorkout"
-      >
+      </div>
+      <div class="row">
+        <button type="button" class="btn btn-primary" @click="editing = !editing">{{ editBtnMsg }}</button>
+      </div>
     </section>
-  </section>
+  </div>
 </template>
 
 <style>
