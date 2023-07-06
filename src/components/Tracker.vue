@@ -33,6 +33,7 @@
     <header class="header">
       <button @click="$emit('click-back')">Back</button>
       <h1>{{ workout.name }}</h1>
+      <h2>{{ new Date().toDateString() }}</h2>
       <div v-if="editing">
         <input
           type="text"
@@ -67,13 +68,11 @@
                   <input
                     type="text"
                     v-model="set.weight"
-                    placeholder="0"
                   >
                   <label>lbs </label>
                   <input
                     type="text"
                     v-model="set.reps"
-                    placeholder="0"
                   >
                   <label>reps </label>
                   <button @click="$emit('delSet', x, set)">x</button>

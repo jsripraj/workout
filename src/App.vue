@@ -30,10 +30,10 @@ class Exercise {
 }
 
 class Set {
-  constructor(name, weight=0, reps=0) {
+  constructor(name) {
     this.name = name
-    this.weight = weight
-    this.reps = reps
+    this.weight = null
+    this.reps = null
   }
 }
 
