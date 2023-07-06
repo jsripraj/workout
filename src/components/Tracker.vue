@@ -46,40 +46,41 @@
       </div>
     </header>
     <section class="main" >
-      <ul class="exercise-list">
-          <li
-            v-for="x in workout.exercises"
-          >
-            <div v-if="editing">
-              <input
-                type="text"
-                v-model="x.name"
-              >
-              <button @click="$emit('moveExerciseUp', x)">Up</button>
-              <button @click="$emit('moveExerciseDown', x)">Down</button>
-              <button @click="$emit('delExercise', x)">x</button>
-            </div>
-            <div v-else>
-              <h3>{{ x.name }}</h3>
-              <ul>
-                <li v-for="set in x.sets">
-                  Set {{ set.name }}
-                  <input
-                    type="text"
-                    v-model="set.weight"
-                  >
-                  <label>lbs </label>
-                  <input
-                    type="text"
-                    v-model="set.reps"
-                  >
-                  <label>reps </label>
-                </li>
-              </ul>
-              <button @click="$emit('addSet', x)">Add New Set</button>
-            </div>
-          </li>
-      </ul>
+      <div class="card" style="width: 18rem;"
+        v-for="x in workout.exercises"
+      >
+        <div class="card-body">
+          <div v-if="editing">
+            <input
+              type="text"
+              v-model="x.name"
+            >
+            <button @click="$emit('moveExerciseUp', x)">Up</button>
+            <button @click="$emit('moveExerciseDown', x)">Down</button>
+            <button @click="$emit('delExercise', x)">x</button>
+          </div>
+          <div v-else>
+            <h4 class="card-title">{{ x.name }}</h4>
+            <ul>
+              <li v-for="set in x.sets">
+                Set {{ set.name }}
+                <input
+                  type="text"
+                  v-model="set.weight"
+                >
+                <label>lbs </label>
+                <input
+                  type="text"
+                  v-model="set.reps"
+                >
+                <label>reps </label>
+              </li>
+            </ul>
+            <button @click="$emit('addSet', x)">Add New Set</button>
+          </div>
+
+        </div>
+      </div>
       <input
         placeholder="Add an exercise"
         @keyup.enter="addExercise"
