@@ -17,7 +17,7 @@
   const editing = ref(false)
 
   const editBtnMsg = computed(() => {
-    return editing.value ? 'Done' : 'Edit Details'
+    return editing.value ? 'Done' : 'Edit Exercises'
   })
 
   function addExercise(e) {
@@ -29,7 +29,7 @@
 </script>
 
 <template>
-  <section class="workout-app">
+  <div class="container text-center">
     <header class="header">
       <button @click="$emit('click-back')">Back</button>
       <h1>{{ workout.name }}</h1>
@@ -44,7 +44,6 @@
       <div v-else>
         <p>{{ workout.description }}</p>
       </div>
-      <button @click="editing = !editing">{{ editBtnMsg }}</button>
     </header>
     <section class="main" >
       <ul class="exercise-list">
@@ -75,7 +74,6 @@
                     v-model="set.reps"
                   >
                   <label>reps </label>
-                  <button @click="$emit('delSet', x, set)">x</button>
                 </li>
               </ul>
               <button @click="$emit('addSet', x)">Add New Set</button>
@@ -86,8 +84,9 @@
         placeholder="Add an exercise"
         @keyup.enter="addExercise"
       >
+      <button @click="editing = !editing">{{ editBtnMsg }}</button>
     </section>
-  </section>
+  </div>
 </template>
 
 <style>
