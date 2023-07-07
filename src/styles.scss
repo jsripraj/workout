@@ -1,5 +1,20 @@
 @import "bootstrap/scss/bootstrap";
 
-h1 {
-    color: red;
+body {
+    background-color: black;
+    color: white;
+}
+
+.bg {
+    position: absolute;
+    inset: 0;
+    height: 100vh;
+    width: 100vw;
+    background-image: url("/assets/luis-reyes-mTorQ9gFf0g-unsplash.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    opacity: 0.3;
+    filter: blur(4px);
+    z-index: -1;
 }
