@@ -16,22 +16,24 @@
 
   const editing = ref(false)
 
+  const newExercise = ref('')
+
   const editBtnMsg = computed(() => {
     return editing.value ? 'Done' : 'Edit Exercises'
   })
 
-  function addExercise(e) {
-    const value = e.target.value.trim()
-    e.target.value = ''
+  function addExercise() {
+    const value = newExercise.value
     emit('addExercise', value)
+    newExercise.value = ''
   }
 
 </script>
 
 <template>
   <div class="container text-center">
-    <div class="row">
-      <button 
+    <div class="row" data-bs-theme="dark">
+      <button  
         type="button" 
         class="btn-close position-relative top-0 start-0 mt-3" 
         aria-label="CLose" 
@@ -112,12 +114,20 @@
 
         </div>
       </div>
-      <div class="row">
+
+      <!-- <div class="row">
         <input
           placeholder="Add an exercise"
           @keyup.enter="addExercise"
         >
+      </div> -->
+
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Add an exercise" v-model="newExercise" @keyup.enter="addExercise">
+        <button class="btn btn-outline-primary" type="button" @click="addExercise">+</button>
       </div>
+
+
       <div class="row">
         <button @click="editing = !editing">{{ editBtnMsg }}</button>
       </div>

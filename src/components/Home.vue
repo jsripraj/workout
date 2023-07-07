@@ -13,23 +13,24 @@ const emit = defineEmits([
 ])
 
 const editing = ref(false)
+const newWorkout = ref('')
 
 const editBtnMsg = computed(() => {
   return editing.value ? 'Done' : 'Edit Workouts'
 })
 
-function addWorkout(e) {
-    const value = e.target.value.trim()
-    e.target.value = ''
+function addWorkout() {
+    const value = newWorkout.value
     emit('addWorkout', value)
+    newWorkout.value = ''
 }
 
 </script>
 
 <template>
-  <div class="container text-center">
+  <div class="home container text-center">
     <header class="header">
-      <h1>Workout Tracker</h1>
+      <h1 class="display-1">Workout Tracker</h1>
     </header>
     <section class="main" >
       <div v-for="workout in workouts">
@@ -50,12 +51,9 @@ function addWorkout(e) {
         </div>
       </div>
       
-      <div class="row">
-        <input
-          class="new-workout"
-          placeholder="Add a workout"
-          @keyup.enter="addWorkout"
-        >
+      <div class="input-group mb-3" data-bs-theme="dark">
+        <input type="text" class="form-control" placeholder="Add a workout" v-model="newWorkout" @keyup.enter="addWorkout">
+        <button class="btn btn-outline-light" type="button" @click="addWorkout">+</button>
       </div>
       <div class="row">
         <button type="button" class="btn btn-primary" @click="editing = !editing">{{ editBtnMsg }}</button>
