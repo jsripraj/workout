@@ -114,19 +114,10 @@
 
         </div>
       </div>
-
-      <!-- <div class="row">
-        <input
-          placeholder="Add an exercise"
-          @keyup.enter="addExercise"
-        >
-      </div> -->
-
       <div class="input-group mb-3">
         <input type="text" class="form-control" placeholder="Add an exercise" v-model="newExercise" @keyup.enter="addExercise">
         <button class="btn btn-outline-primary" type="button" @click="addExercise">+</button>
       </div>
-
 
       <div class="row">
         <button @click="editing = !editing">{{ editBtnMsg }}</button>
