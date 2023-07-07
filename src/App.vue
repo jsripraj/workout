@@ -53,14 +53,8 @@ function addSet(exercise) {
   exercise.sets.push(new Set(`${exercise.sets.length + 1}`))
 }
 
-function delSet(exercise, set) {
-  for (let i = 0; i < exercise.sets.length; i++) {
-    if (exercise.sets[i] === set) {
-      exercise.sets.splice(i, 1)
-      break
-    }
-  }
-
+function delSet(exercise) {
+  exercise.sets.pop();
 }
 
 function addWorkout(woName) {
