@@ -33,7 +33,7 @@ function addWorkout() {
       <div class="row">
         <div class="col">
           <header class="header">
-            <h1 class="display-1">Workout Tracker</h1>
+            <p class="display-1">Workout Tracker</p>
           </header>
         </div>
       </div>

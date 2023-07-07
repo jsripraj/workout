@@ -31,8 +31,8 @@
 </script>
 
 <template>
-  <div class="container text-center">
-    <div class="row" data-bs-theme="dark">
+  <div class="container text-center mt-5">
+    <div class="position-absolute top-0 start-0 ms-3" data-bs-theme="dark">
       <button  
         type="button" 
         class="btn-close position-relative top-0 start-0 mt-3" 
@@ -40,7 +40,7 @@
         @click="$emit('click-back')">
       </button>
     </div>
-      <h1>{{ workout.name }}</h1>
+      <p class="display-2">{{ workout.name }}</p>
       <h2>{{ new Date().toDateString() }}</h2>
       <div v-if="editing">
         <input
