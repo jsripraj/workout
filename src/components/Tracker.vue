@@ -56,14 +56,17 @@
         class="card my-3"
       >
         <div class="card-body">
-          <div v-if="editing">
-            <input
-              type="text"
-              v-model="x.name"
-            >
-            <button @click="$emit('moveExerciseUp', x)">Up</button>
-            <button @click="$emit('moveExerciseDown', x)">Down</button>
-            <button @click="$emit('delExercise', x)">x</button>
+          <div v-if="editing" class="input-group">
+            <input v-model="x.name" type="text" class="form-control">
+            <button type="button" class="btn btn-outline-primary" @click="$emit('moveExerciseUp', workout)">
+              <img src="/assets/icons/arrow-up-circle-fill.svg" alt="Move Up">
+            </button>
+            <button type="button" class="btn btn-outline-primary" @click="$emit('moveExerciseDown', workout)">
+              <img src="/assets/icons/arrow-down-circle-fill.svg" alt="Move Down">
+            </button>
+            <button type="button" class="btn btn-outline-primary" @click="$emit('delExercise', workout)">
+              <img src="/assets/icons/x-circle-fill.svg" alt="Delete">
+            </button>
           </div>
           <div v-else>
             <ul class="list-group list-group-flush">
