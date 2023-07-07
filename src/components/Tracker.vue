@@ -30,8 +30,14 @@
 
 <template>
   <div class="container text-center">
-    <header class="header">
-      <button @click="$emit('click-back')">Back</button>
+    <div class="row">
+      <button 
+        type="button" 
+        class="btn-close position-relative top-0 start-0 mt-3" 
+        aria-label="CLose" 
+        @click="$emit('click-back')">
+      </button>
+    </div>
       <h1>{{ workout.name }}</h1>
       <h2>{{ new Date().toDateString() }}</h2>
       <div v-if="editing">
@@ -44,10 +50,10 @@
       <div v-else>
         <p>{{ workout.description }}</p>
       </div>
-    </header>
     <section class="main" >
-      <div class="card" style="width: 18rem;"
+      <div 
         v-for="x in workout.exercises"
+        class="card my-3"
       >
         <div class="card-body">
           <div v-if="editing">
@@ -60,32 +66,58 @@
             <button @click="$emit('delExercise', x)">x</button>
           </div>
           <div v-else>
-            <h4 class="card-title">{{ x.name }}</h4>
-            <ul>
-              <li v-for="set in x.sets">
-                Set {{ set.name }}
-                <input
-                  type="text"
-                  v-model="set.weight"
-                >
-                <label>lbs </label>
-                <input
-                  type="text"
-                  v-model="set.reps"
-                >
-                <label>reps </label>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                <h5 class="card-title">{{ x.name }}</h5>
+              </li>
+              <li class="list-group-item" 
+              v-for="set in x.sets">
+                <p>Set {{ set.name }}</p>
+                <div class="row">
+                  <input
+                    class="col"
+                    type="text"
+                    v-model="set.weight"
+                  >
+                  <label class="col">lbs </label>
+                </div>
+                <div class="row">
+                  <input
+                  class="col"
+                    type="text"
+                    v-model="set.reps"
+                  >
+                  <label class="col">reps </label>
+                </div>
+              </li>
+              <li class="list-group-item">
+                <button 
+                  @click="$emit('addSet', x)" 
+                  type="button" 
+                  class="btn btn-primary m-2">
+                  New Set
+                </button>
+                <button 
+                  @click="$emit('delSet', x)"
+                  type="button"
+                  class = "btn btn-primary m-2">
+                  Delete Set
+                </button>
               </li>
             </ul>
-            <button @click="$emit('addSet', x)">Add New Set</button>
           </div>
 
         </div>
       </div>
-      <input
-        placeholder="Add an exercise"
-        @keyup.enter="addExercise"
-      >
-      <button @click="editing = !editing">{{ editBtnMsg }}</button>
+      <div class="row">
+        <input
+          placeholder="Add an exercise"
+          @keyup.enter="addExercise"
+        >
+      </div>
+      <div class="row">
+        <button @click="editing = !editing">{{ editBtnMsg }}</button>
+      </div>
     </section>
   </div>
 </template>
