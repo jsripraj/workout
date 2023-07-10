@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, addDoc } from 'firebase/firestore/lite';
-import { getAuth, signInAnonymously } from "firebase/auth";
+import { GoogleAuthProvider, getAuth, signInWithRedirect } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDCtB516R6TQv2wx-Ikf0-AsMxDlJhJmZw",
@@ -16,21 +16,18 @@ export async function firestore() {
     const app = initializeApp(firebaseConfig);
 
     // Authenticate
-    try {
+    const provider = new GoogleAuthProvider();
     const auth = getAuth(app);
-    console.log('success: getAuth');
-    signInAnonymously(auth)
-        .then(() => {
-        console.log("signed in")
+    signInWithRedirect(auth, provider)
+        .then((result) => {
+            const user = result.user;
+            console.log(user);
+        }).catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            const email = error.customData.email;
+            console.log(`error: code: ${errorCode}, msg: ${errorMessage}, email: ${email}`);
         })
-        .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(`error: code: ${errorCode}, msg: ${errorMessage}`);
-        });
-    } catch (e) {
-    console.log(`error: getAuth: ${e}`);
-    }
 
     // Create Firestore instance
     const db = getFirestore(app);
