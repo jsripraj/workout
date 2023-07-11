@@ -1,6 +1,12 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, addDoc } from 'firebase/firestore/lite';
-import { GoogleAuthProvider, getAuth, signInWithRedirect } from "firebase/auth";
+import { 
+    GoogleAuthProvider,
+    getAuth, 
+    signInWithRedirect, 
+    onAuthStateChanged, 
+    getRedirectResult, 
+} from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDCtB516R6TQv2wx-Ikf0-AsMxDlJhJmZw",
@@ -13,34 +19,51 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
-export function auth() {
+export async function auth() {
     const auth = getAuth(app);
-    auth.onAuthStateChanged(async function(user) {
-        if (user) {
-            console.log(`user is signed in: name: ${user.displayName}, email: ${user.email}`);
-            console.log(`user: ${JSON.stringify(user)}`);
-            return user
-        } 
-        // Else redirect to authentication widget
-        // window.location.assign('/widget');
+    const provider = new GoogleAuthProvider();
 
-        // Authenticate
-        const provider = new GoogleAuthProvider();
-        await signInWithRedirect(auth, provider)
-            .then((result) => {
-                const user = result.user;
-                console.log(user);
-            }).catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                const email = error.customData.email;
-                console.log(`error: code: ${errorCode}, msg: ${errorMessage}, email: ${email}`);
-            })
+    getRedirectResult(auth)
+        .then(async (result) => {
+            if (result === null) {
+                await signInWithRedirect(auth, provider)
+                    .then((result) => {
+                        const user = result.user;
+                        console.log(user);
+                    }).catch((error) => {
+                        const errorCode = error.code;
+                        const errorMessage = error.message;
+                        const email = error.customData.email;
+                        console.log(`error: code: ${errorCode}, msg: ${errorMessage}, email: ${email}`);
+                    });
+            } else {
+                console.log(`user is signed in. User = ${result.user}`)
+            }
+        }).catch((error) => {
+            console.log(`error signing in: code: ${error.code}, msg: ${error.msg}`)
         });
 }
+    // onAuthStateChanged(auth, async (user) => {
+    //     if (user) {
+    //         console.log(`user is signed in: name: ${user.displayName}, email: ${user.email}`);
+    //         console.log(`user: ${JSON.stringify(user)}`);
+    //     } else {
+    //         console.log('user is not signed in')
+    //         const provider = new GoogleAuthProvider();
+    //         await signInWithRedirect(auth, provider)
+    //             .then((result) => {
+    //                 const user = result.user;
+    //                 console.log(user);
+    //             }).catch((error) => {
+    //                 const errorCode = error.code;
+    //                 const errorMessage = error.message;
+    //                 const email = error.customData.email;
+    //                 console.log(`error: code: ${errorCode}, msg: ${errorMessage}, email: ${email}`);
+    //             });
+    //     }
+    // });
 
-export async function firestore() {
-
+async function firestore() {
     // Create Firestore instance
     const db = getFirestore(app);
 

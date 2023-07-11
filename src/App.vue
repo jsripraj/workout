@@ -5,7 +5,9 @@ import Tracker from './components/Tracker.vue'
 
 import { auth } from '/src/firebase.js';
 
+console.log(`calling auth`)
 const user = auth();
+console.log(`after calling auth`)
 
 const pageTypes = {
     Home: 'home',
