@@ -60,13 +60,13 @@
         <div class="card-body">
           <div v-if="editing" class="input-group">
             <input v-model="x.name" type="text" class="form-control">
-            <button type="button" class="btn btn-outline-primary" @click="$emit('moveExerciseUp', workout)">
+            <button type="button" class="btn btn-outline-primary" @click="$emit('moveExerciseUp', x)">
               <img src="/assets/icons/arrow-up-circle-fill.svg" alt="Move Up">
             </button>
-            <button type="button" class="btn btn-outline-primary" @click="$emit('moveExerciseDown', workout)">
+            <button type="button" class="btn btn-outline-primary" @click="$emit('moveExerciseDown', x)">
               <img src="/assets/icons/arrow-down-circle-fill.svg" alt="Move Down">
             </button>
-            <button type="button" class="btn btn-outline-primary" @click="$emit('delExercise', workout)">
+            <button type="button" class="btn btn-outline-primary" @click="$emit('delExercise', x)">
               <img src="/assets/icons/x-circle-fill.svg" alt="Delete">
             </button>
           </div>
