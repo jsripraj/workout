@@ -3,6 +3,10 @@ import { ref, watchEffect } from 'vue'
 import Home from './components/Home.vue'
 import Tracker from './components/Tracker.vue'
 
+import { firestore } from "/src/firebase.js";
+
+const db = firestore();
+
 const pageTypes = {
     Home: 'home',
     Tracker: 'tracker'
