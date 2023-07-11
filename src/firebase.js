@@ -11,23 +11,35 @@ const firebaseConfig = {
   appId: "1:444100980841:web:f41022017841f08bf1f2f8"
 };
 
-export async function firestore() {
-    // Create Firebase app
-    const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
-    // Authenticate
-    const provider = new GoogleAuthProvider();
+export function auth() {
     const auth = getAuth(app);
-    signInWithRedirect(auth, provider)
-        .then((result) => {
-            const user = result.user;
-            console.log(user);
-        }).catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            const email = error.customData.email;
-            console.log(`error: code: ${errorCode}, msg: ${errorMessage}, email: ${email}`);
-        })
+    auth.onAuthStateChanged(async function(user) {
+        if (user) {
+            console.log(`user is signed in: name: ${user.displayName}, email: ${user.email}`);
+            console.log(`user: ${JSON.stringify(user)}`);
+            return user
+        } 
+        // Else redirect to authentication widget
+        // window.location.assign('/widget');
+
+        // Authenticate
+        const provider = new GoogleAuthProvider();
+        await signInWithRedirect(auth, provider)
+            .then((result) => {
+                const user = result.user;
+                console.log(user);
+            }).catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                const email = error.customData.email;
+                console.log(`error: code: ${errorCode}, msg: ${errorMessage}, email: ${email}`);
+            })
+        });
+}
+
+export async function firestore() {
 
     // Create Firestore instance
     const db = getFirestore(app);
