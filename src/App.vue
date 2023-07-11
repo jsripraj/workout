@@ -3,12 +3,13 @@ import { ref, watchEffect } from 'vue'
 import Home from './components/Home.vue'
 import Tracker from './components/Tracker.vue'
 
-import { auth } from '/src/firebase.js';
+import * as firebase from '/src/firebase.js';
 import * as types from '/src/types.js';
 
 console.log(`calling auth`)
-const user = auth();
+firebase.auth();
 console.log(`after calling auth`)
+const db = firebase.newFirestore();
 
 const appState = {
     page: ref(types.pageTypes.Home),
@@ -84,7 +85,6 @@ function moveExerciseUp(exercise) {
       break
     }
   }
-
 }
 
 function moveWorkoutDown(workout) {
@@ -123,6 +123,11 @@ function closeTracker() {
   appState.trackedWorkout.value = null
 }
 
+function saveTrackedWorkout() {
+  console.log('called saveTrackedWorkout');
+  firebase.write(db);
+}
+
 </script>
 
 <template>
@@ -144,6 +149,7 @@ function closeTracker() {
         @move-exercise-down="moveExerciseDown"
         @add-set="addSet"
         @del-set="delSet"
+        @save-tracked-workout="saveTrackedWorkout"
     />
   </div>
 </template>

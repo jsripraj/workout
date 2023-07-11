@@ -12,6 +12,7 @@
     'moveExerciseDown',
     'addSet',
     'delSet',
+    'saveTrackedWorkout',
   ])
 
   const editing = ref(false)
@@ -121,6 +122,9 @@
 
       <div class="row">
         <button @click="editing = !editing">{{ editBtnMsg }}</button>
+      </div>
+      <div class="row">
+        <button @click="$emit('saveTrackedWorkout'); $emit('click-back')">Save to History</button>
       </div>
     </section>
   </div>

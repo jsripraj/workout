@@ -4,7 +4,6 @@ import {
     GoogleAuthProvider,
     getAuth, 
     signInWithRedirect, 
-    getRedirectResult, 
     onAuthStateChanged,
 } from "firebase/auth";
 
@@ -41,19 +40,22 @@ export async function auth() {
     })
 }
 
-async function firestore() {
-    // Create Firestore instance
+export function newFirestore() {
     const db = getFirestore(app);
+    return db;
 
+}
+
+export async function write(db) {
     try {
-    console.log('trying to add doc');
-    const docRef = await addDoc(collection(db, "users"), {
-        first: "Ada",
-        last: "Lovelace", 
-        born: 1815
-    });
-    console.log("Document written with ID: ", docRef.id);
+        console.log('trying to add doc');
+        const docRef = await addDoc(collection(db, "test"), {
+            first: "Chase",
+            last: "Sripraj", 
+            born: 1998,
+        });
+        console.log("Document written with ID: ", docRef.id);
     } catch (e) {
-    console.error("Error adding document: ", e);
+        console.error("Error adding document: ", e);
     }
 }
