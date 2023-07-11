@@ -9,7 +9,8 @@ const emit = defineEmits([
   'clickWorkout', 
   'delWorkout', 
   'moveWorkoutUp', 
-  'moveWorkoutDown'
+  'moveWorkoutDown',
+  'signout'
 ])
 
 const editing = ref(false)
@@ -30,6 +31,14 @@ function addWorkout() {
 <template>
   <div class="container text-center my-4">
     <div class="grid row-gap-5">
+      <div class="row">
+        <div class="col">
+          <p>Hello, name</p>
+        </div>
+        <div class="col">
+          <button type="button" class="btn btn-warning" @click="$emit('signout')">Sign Out</button>
+        </div>
+      </div>
       <div class="row">
         <div class="col">
           <header class="header">
