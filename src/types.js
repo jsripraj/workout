@@ -25,3 +25,10 @@ export class Set {
     this.reps = null
   }
 }
+
+export class User {
+    constructor(name, email='', displayName='') {
+        this.email = email 
+        this.displayName = displayName
+    }
+}
