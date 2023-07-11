@@ -34,7 +34,7 @@ export async function auth() {
                         const errorCode = error.code;
                         const errorMessage = error.message;
                         const email = error.customData.email;
-                        console.log(`error: code: ${errorCode}, msg: ${errorMessage}, email: ${email}`);
+                        console.error(`signInWithRedirect: code: ${errorCode}, msg: ${errorMessage}, email: ${email}`);
                     });
             } else {
                 console.log(`user is signed in. User = ${result.user}`)
@@ -43,25 +43,6 @@ export async function auth() {
             console.log(`error signing in: code: ${error.code}, msg: ${error.msg}`)
         });
 }
-    // onAuthStateChanged(auth, async (user) => {
-    //     if (user) {
-    //         console.log(`user is signed in: name: ${user.displayName}, email: ${user.email}`);
-    //         console.log(`user: ${JSON.stringify(user)}`);
-    //     } else {
-    //         console.log('user is not signed in')
-    //         const provider = new GoogleAuthProvider();
-    //         await signInWithRedirect(auth, provider)
-    //             .then((result) => {
-    //                 const user = result.user;
-    //                 console.log(user);
-    //             }).catch((error) => {
-    //                 const errorCode = error.code;
-    //                 const errorMessage = error.message;
-    //                 const email = error.customData.email;
-    //                 console.log(`error: code: ${errorCode}, msg: ${errorMessage}, email: ${email}`);
-    //             });
-    //     }
-    // });
 
 async function firestore() {
     // Create Firestore instance

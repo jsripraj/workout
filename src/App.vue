@@ -4,18 +4,15 @@ import Home from './components/Home.vue'
 import Tracker from './components/Tracker.vue'
 
 import { auth } from '/src/firebase.js';
+import * as types from '/src/types.js';
 
 console.log(`calling auth`)
 const user = auth();
 console.log(`after calling auth`)
 
-const pageTypes = {
-    Home: 'home',
-    Tracker: 'tracker'
-}
 
 const appState = {
-    page: ref(pageTypes.Home),
+    page: ref(types.pageTypes.Home),
     workouts: ref(JSON.parse(localStorage.getItem('workouts') || '[]')),
     trackedWorkout: ref(),
 }
@@ -141,12 +138,12 @@ function moveWorkoutUp(workout) {
 }
 
 function openTracker(workout) {
-  appState.page.value = pageTypes.Tracker
+  appState.page.value = types.pageTypes.Tracker
   appState.trackedWorkout.value = workout
 }
 
 function closeTracker() {
-  appState.page.value = pageTypes.Home
+  appState.page.value = types.pageTypes.Home
   appState.trackedWorkout.value = null
 }
 
@@ -154,7 +151,7 @@ function closeTracker() {
 
 <template>
   <div class="container">
-    <Home v-if="appState.page.value === pageTypes.Home"
+    <Home v-if="appState.page.value === types.pageTypes.Home"
         :workouts="appState.workouts.value" 
         @add-workout="addWorkout" 
         @click-workout="openTracker"
@@ -162,7 +159,7 @@ function closeTracker() {
         @move-workout-up="moveWorkoutUp"
         @move-workout-down="moveWorkoutDown" 
     />
-    <Tracker v-else-if="appState.page.value === pageTypes.Tracker"
+    <Tracker v-else-if="appState.page.value === types.pageTypes.Tracker"
         :workout = "appState.trackedWorkout.value"
         @click-back="closeTracker"
         @add-exercise="addExercise"
