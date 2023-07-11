@@ -10,34 +10,10 @@ console.log(`calling auth`)
 const user = auth();
 console.log(`after calling auth`)
 
-
 const appState = {
     page: ref(types.pageTypes.Home),
     workouts: ref(JSON.parse(localStorage.getItem('workouts') || '[]')),
     trackedWorkout: ref(),
-}
-
-class Workout {
-  constructor(name) {
-    this.name = name
-    this.description = "Sample description describes the workout and any notes the user wants to include"
-    this.exercises = []
-  }
-}
-
-class Exercise {
-  constructor(name) {
-    this.name = name
-    this.sets = []
-  }
-}
-
-class Set {
-  constructor(name) {
-    this.name = name
-    this.weight = null
-    this.reps = null
-  }
 }
 
 // persist state -- eventually this will be stored in database
@@ -48,12 +24,12 @@ watchEffect(() => {
 
 function addExercise(exName) {
   if (exName) {
-    appState.trackedWorkout.value.exercises.push(new Exercise(exName))
+    appState.trackedWorkout.value.exercises.push(new types.Exercise(exName))
   }
 }
 
 function addSet(exercise) {
-  exercise.sets.push(new Set(`${exercise.sets.length + 1}`))
+  exercise.sets.push(new types.Set(`${exercise.sets.length + 1}`))
 }
 
 function delSet(exercise) {
@@ -62,7 +38,7 @@ function delSet(exercise) {
 
 function addWorkout(woName) {
   if (woName) {
-    appState.workouts.value.push(new Workout(woName))
+    appState.workouts.value.push(new types.Workout(woName))
   }
 }
 
