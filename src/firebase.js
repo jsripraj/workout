@@ -1,6 +1,12 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, addDoc } from 'firebase/firestore/lite';
-import { getAuth, signInAnonymously } from "firebase/auth";
+import { 
+    GoogleAuthProvider,
+    getAuth, 
+    signInWithRedirect, 
+    getRedirectResult, 
+    onAuthStateChanged,
+} from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDCtB516R6TQv2wx-Ikf0-AsMxDlJhJmZw",
@@ -11,27 +17,31 @@ const firebaseConfig = {
   appId: "1:444100980841:web:f41022017841f08bf1f2f8"
 };
 
-export async function firestore() {
-    // Create Firebase app
-    const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
-    // Authenticate
-    try {
+export async function auth() {
     const auth = getAuth(app);
-    console.log('success: getAuth');
-    signInAnonymously(auth)
-        .then(() => {
-        console.log("signed in")
-        })
-        .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(`error: code: ${errorCode}, msg: ${errorMessage}`);
-        });
-    } catch (e) {
-    console.log(`error: getAuth: ${e}`);
-    }
+    const provider = new GoogleAuthProvider();
 
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            console.log(`user is signed in. User = ${user}`)
+        } else {
+            await signInWithRedirect(auth, provider)
+                .then((result) => {
+                    const user = result.user;
+                    console.log(user);
+                }).catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    const email = error.customData.email;
+                    console.error(`signInWithRedirect: code: ${errorCode}, msg: ${errorMessage}, email: ${email}`);
+                });
+        }
+    })
+}
+
+async function firestore() {
     // Create Firestore instance
     const db = getFirestore(app);
 

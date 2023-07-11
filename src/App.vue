@@ -3,42 +3,17 @@ import { ref, watchEffect } from 'vue'
 import Home from './components/Home.vue'
 import Tracker from './components/Tracker.vue'
 
-import { firestore } from "/src/firebase.js";
+import { auth } from '/src/firebase.js';
+import * as types from '/src/types.js';
 
-const db = firestore();
-
-const pageTypes = {
-    Home: 'home',
-    Tracker: 'tracker'
-}
+console.log(`calling auth`)
+const user = auth();
+console.log(`after calling auth`)
 
 const appState = {
-    page: ref(pageTypes.Home),
+    page: ref(types.pageTypes.Home),
     workouts: ref(JSON.parse(localStorage.getItem('workouts') || '[]')),
     trackedWorkout: ref(),
-}
-
-class Workout {
-  constructor(name) {
-    this.name = name
-    this.description = "Sample description describes the workout and any notes the user wants to include"
-    this.exercises = []
-  }
-}
-
-class Exercise {
-  constructor(name) {
-    this.name = name
-    this.sets = []
-  }
-}
-
-class Set {
-  constructor(name) {
-    this.name = name
-    this.weight = null
-    this.reps = null
-  }
 }
 
 // persist state -- eventually this will be stored in database
@@ -49,12 +24,12 @@ watchEffect(() => {
 
 function addExercise(exName) {
   if (exName) {
-    appState.trackedWorkout.value.exercises.push(new Exercise(exName))
+    appState.trackedWorkout.value.exercises.push(new types.Exercise(exName))
   }
 }
 
 function addSet(exercise) {
-  exercise.sets.push(new Set(`${exercise.sets.length + 1}`))
+  exercise.sets.push(new types.Set(`${exercise.sets.length + 1}`))
 }
 
 function delSet(exercise) {
@@ -63,7 +38,7 @@ function delSet(exercise) {
 
 function addWorkout(woName) {
   if (woName) {
-    appState.workouts.value.push(new Workout(woName))
+    appState.workouts.value.push(new types.Workout(woName))
   }
 }
 
@@ -90,6 +65,7 @@ function delWorkout(workout) {
 }
 
 function moveExerciseDown(exercise) {
+  console.log('called moveExerciseDown');
   for (let i = 0; i < appState.trackedWorkout.value.exercises.length - 1; i++) {
     if (appState.trackedWorkout.value.exercises[i] === exercise) {
       let t = appState.trackedWorkout.value.exercises[i]
@@ -139,12 +115,12 @@ function moveWorkoutUp(workout) {
 }
 
 function openTracker(workout) {
-  appState.page.value = pageTypes.Tracker
+  appState.page.value = types.pageTypes.Tracker
   appState.trackedWorkout.value = workout
 }
 
 function closeTracker() {
-  appState.page.value = pageTypes.Home
+  appState.page.value = types.pageTypes.Home
   appState.trackedWorkout.value = null
 }
 
@@ -152,7 +128,7 @@ function closeTracker() {
 
 <template>
   <div class="container">
-    <Home v-if="appState.page.value === pageTypes.Home"
+    <Home v-if="appState.page.value === types.pageTypes.Home"
         :workouts="appState.workouts.value" 
         @add-workout="addWorkout" 
         @click-workout="openTracker"
@@ -160,7 +136,7 @@ function closeTracker() {
         @move-workout-up="moveWorkoutUp"
         @move-workout-down="moveWorkoutDown" 
     />
-    <Tracker v-else-if="appState.page.value === pageTypes.Tracker"
+    <Tracker v-else-if="appState.page.value === types.pageTypes.Tracker"
         :workout = "appState.trackedWorkout.value"
         @click-back="closeTracker"
         @add-exercise="addExercise"
