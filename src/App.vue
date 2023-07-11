@@ -128,6 +128,10 @@ function saveTrackedWorkout() {
   firebase.write(db);
 }
 
+function signout() {
+  firebase.signout();
+}
+
 </script>
 
 <template>
@@ -139,6 +143,7 @@ function saveTrackedWorkout() {
         @del-workout="delWorkout"
         @move-workout-up="moveWorkoutUp"
         @move-workout-down="moveWorkoutDown" 
+        @signout="signout"
     />
     <Tracker v-else-if="appState.page.value === types.pageTypes.Tracker"
         :workout = "appState.trackedWorkout.value"

@@ -6,6 +6,7 @@ import {
     signInWithRedirect, 
     getRedirectResult,
     onAuthStateChanged,
+    signOut,
 } from "firebase/auth";
 
 import { User } from '/src/types.js'
@@ -56,7 +57,11 @@ export async function auth() {
 export function newFirestore() {
     const db = getFirestore(app);
     return db;
+}
 
+export function signout() {
+    console.log('signing out user')
+    signOut(getAuth(app));
 }
 
 export async function write(db) {
