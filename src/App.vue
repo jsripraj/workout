@@ -65,6 +65,7 @@ function delWorkout(workout) {
 }
 
 function moveExerciseDown(exercise) {
+  console.log('called moveExerciseDown');
   for (let i = 0; i < appState.trackedWorkout.value.exercises.length - 1; i++) {
     if (appState.trackedWorkout.value.exercises[i] === exercise) {
       let t = appState.trackedWorkout.value.exercises[i]
