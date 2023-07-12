@@ -122,9 +122,15 @@ function closeTracker() {
   appState.trackedWorkout.value = null
 }
 
-function saveTrackedWorkout() {
-  console.log('called saveTrackedWorkout');
-  firebase.write(db);
+// function saveTrackedWorkout() {
+//   console.log('called saveTrackedWorkout');
+//   firebase.write(db);
+// }
+
+function saveWorkouts() {
+  // TODO: Change this to write the actual workouts to firebase.
+  // For now, just send some toy data.
+  firebase.write();
 }
 
 function signout() {
@@ -144,6 +150,7 @@ function signout() {
         @move-workout-up="moveWorkoutUp"
         @move-workout-down="moveWorkoutDown" 
         @signout="signout"
+        @save-workouts="saveWorkouts"
     />
     <Tracker v-else-if="appState.page.value === types.pageTypes.Tracker"
         :workout = "appState.trackedWorkout.value"

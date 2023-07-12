@@ -4,12 +4,11 @@ import {
     GoogleAuthProvider,
     getAuth, 
     signInWithRedirect, 
-    getRedirectResult,
     onAuthStateChanged,
     signOut,
 } from "firebase/auth";
 
-import { User } from '/src/types.js'
+// import { User } from '/src/types.js'
 
 const firebaseConfig = {
   apiKey: "AIzaSyDCtB516R6TQv2wx-Ikf0-AsMxDlJhJmZw",
@@ -22,6 +21,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app)
+const db = getFirestore(app);
 
 export function initAuthObserver(vueUser) {
     onAuthStateChanged(auth, async (user) => {
@@ -62,7 +62,7 @@ export function initAuthObserver(vueUser) {
 }
 
 // Returns null if the current user has not yet been initialized by the observer
-export function getCurrentUser(user, timeout) {
+// export function getCurrentUser(user, timeout) {
     // let elapsed = 0;
     // while (elapsed < timeout) {
     //     console.log(`elapsed = ${elapsed}`);
@@ -78,25 +78,25 @@ export function getCurrentUser(user, timeout) {
     // console.log("timed out");
     // return null;
 
-    getCurrentUserPromise(timeout)
-        .then((user) => {
-            return user;
-        });
-}
+//     getCurrentUserPromise(timeout)
+//         .then((user) => {
+//             return user;
+//         });
+// }
 
-function getCurrentUserPromise(timeout) {
-    const start = Date.now();
-    return new Promise(waitForUser);
-    function waitForUser(resolve, reject) {
-        if (auth.currentUser) {
-            resolve(new User(auth.currentUser.email, auth.currentUser.displayName));
-        } else if (timeout && (Date.now() - start) >= timeout) {
-            reject(new Error("timeout"));
-        } else {
-            setTimeout(waitForUser.bind(this, resolve, reject), 50);
-        }
-    }
-}
+// function getCurrentUserPromise(timeout) {
+//     const start = Date.now();
+//     return new Promise(waitForUser);
+//     function waitForUser(resolve, reject) {
+//         if (auth.currentUser) {
+//             resolve(new User(auth.currentUser.email, auth.currentUser.displayName));
+//         } else if (timeout && (Date.now() - start) >= timeout) {
+//             reject(new Error("timeout"));
+//         } else {
+//             setTimeout(waitForUser.bind(this, resolve, reject), 50);
+//         }
+//     }
+// }
 
 
 // export function auth() {
@@ -112,23 +112,18 @@ function getCurrentUserPromise(timeout) {
     // }
 // }
 
-export function newFirestore() {
-    const db = getFirestore(app);
-    return db;
-}
-
 export function signout() {
     console.log('signing out user')
     signOut(getAuth(app));
 }
 
-export async function write(db) {
+export async function write() {
     try {
         console.log('trying to add doc');
         const docRef = await addDoc(collection(db, "test"), {
-            first: "Chase",
-            last: "Sripraj", 
-            born: 1998,
+            first: "Kat",
+            last: "Wong", 
+            born: 1996,
         });
         console.log("Document written with ID: ", docRef.id);
     } catch (e) {
