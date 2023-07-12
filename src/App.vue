@@ -129,7 +129,7 @@ function closeTracker() {
 function saveWorkouts() {
   // TODO: Change this to write the actual workouts to firebase.
   // For now, just send some toy data.
-  firebase.write();
+  firebase.writeWorkouts(user.email, state.workouts.value);
 }
 
 function signout() {

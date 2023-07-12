@@ -1,5 +1,9 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, addDoc } from 'firebase/firestore/lite';
+import { 
+    getFirestore, 
+    doc, 
+    setDoc,
+} from 'firebase/firestore/lite';
 import { 
     GoogleAuthProvider,
     getAuth, 
@@ -117,15 +121,18 @@ export function signout() {
     signOut(getAuth(app));
 }
 
-export async function write() {
+export async function writeWorkouts(email, data) {
     try {
         console.log('trying to add doc');
-        const docRef = await addDoc(collection(db, "test"), {
-            first: "Kat",
-            last: "Wong", 
-            born: 1996,
+        // const docRef = await addDoc(collection(db, "test"), {
+        //     first: "Kat",
+        //     last: "Wong", 
+        //     born: 1996,
+        // });
+        // console.log("Document written with ID: ", docRef.id);
+        await setDoc(doc(db, email, "workouts"), {
+            workouts: data
         });
-        console.log("Document written with ID: ", docRef.id);
     } catch (e) {
         console.error("Error adding document: ", e);
     }
