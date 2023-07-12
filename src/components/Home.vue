@@ -2,14 +2,18 @@
 
 import { ref, computed } from 'vue'
 
-defineProps(['workouts'])
+const props = defineProps(['workouts', 'user']);
+
+console.log(`prop: user = ${JSON.stringify(props.user)}`);
 
 const emit = defineEmits([
   'addWorkout', 
   'clickWorkout', 
   'delWorkout', 
   'moveWorkoutUp', 
-  'moveWorkoutDown'
+  'moveWorkoutDown',
+  'signout',
+  'saveWorkouts',
 ])
 
 const editing = ref(false)
@@ -30,6 +34,15 @@ function addWorkout() {
 <template>
   <div class="container text-center my-4">
     <div class="grid row-gap-5">
+      <div class="row">
+        <div class="col">
+          <!-- <p>Hello, {{ user.displayName }}</p> -->
+          <p>Hello, {{ user.displayName }}</p>
+        </div>
+        <div class="col">
+          <button type="button" class="btn btn-warning" @click="$emit('signout')">Sign Out</button>
+        </div>
+      </div>
       <div class="row">
         <div class="col">
           <header class="header">
@@ -73,6 +86,11 @@ function addWorkout() {
       <div class="row">
         <div class="col">
           <button type="button" class="btn btn-primary" @click="editing = !editing">{{ editBtnMsg }}</button>
+        </div>
+      </div>
+      <div class = "row">
+        <div class="col">
+          <button v-if="!editing" type="button" class="btn btn-primary" @click="$emit('saveWorkouts')">Save Workouts</button>
         </div>
       </div>
     </div>

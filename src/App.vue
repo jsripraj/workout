@@ -1,16 +1,15 @@
 <script setup>
-import { ref, watchEffect } from 'vue'
+import { ref, reactive, watch, watchEffect } from 'vue'
 import Home from './components/Home.vue'
 import Tracker from './components/Tracker.vue'
 
-import { auth } from '/src/firebase.js';
+import * as firebase from '/src/firebase.js';
 import * as types from '/src/types.js';
 
-console.log(`calling auth`)
-const user = auth();
-console.log(`after calling auth`)
+const user = reactive(new types.User());
+firebase.initAuthObserver(user);
 
-const appState = {
+const state = {
     page: ref(types.pageTypes.Home),
     workouts: ref(JSON.parse(localStorage.getItem('workouts') || '[]')),
     trackedWorkout: ref(),
@@ -18,13 +17,13 @@ const appState = {
 
 // persist state -- eventually this will be stored in database
 watchEffect(() => {
-  localStorage.setItem('workouts', JSON.stringify(appState.workouts.value))
+  localStorage.setItem('workouts', JSON.stringify(state.workouts.value))
   // localStorage.setItem('workouts', JSON.stringify([]))
 })
 
 function addExercise(exName) {
   if (exName) {
-    appState.trackedWorkout.value.exercises.push(new types.Exercise(exName))
+    state.trackedWorkout.value.exercises.push(new types.Exercise(exName))
   }
 }
 
@@ -38,15 +37,15 @@ function delSet(exercise) {
 
 function addWorkout(woName) {
   if (woName) {
-    appState.workouts.value.push(new types.Workout(woName))
+    state.workouts.value.push(new types.Workout(woName))
   }
 }
 
 function delExercise(exercise) {
   let i = 0
-  for (const x of appState.trackedWorkout.value.exercises) {
+  for (const x of state.trackedWorkout.value.exercises) {
     if (x === exercise) {
-      appState.trackedWorkout.value.exercises.splice(i, 1)
+      state.trackedWorkout.value.exercises.splice(i, 1)
       break
     }
     i++
@@ -55,9 +54,9 @@ function delExercise(exercise) {
 
 function delWorkout(workout) {
   let i = 0
-  for (const w of appState.workouts.value) {
+  for (const w of state.workouts.value) {
     if (w === workout) {
-      appState.workouts.value.splice(i, 1)
+      state.workouts.value.splice(i, 1)
       break
     }
     i++
@@ -65,35 +64,34 @@ function delWorkout(workout) {
 }
 
 function moveExerciseDown(exercise) {
-  for (let i = 0; i < appState.trackedWorkout.value.exercises.length - 1; i++) {
-    if (appState.trackedWorkout.value.exercises[i] === exercise) {
-      let t = appState.trackedWorkout.value.exercises[i]
-      appState.trackedWorkout.value.exercises[i] = appState.trackedWorkout.value.exercises[i+1]
-      appState.trackedWorkout.value.exercises[i+1] = t
+  for (let i = 0; i < state.trackedWorkout.value.exercises.length - 1; i++) {
+    if (state.trackedWorkout.value.exercises[i] === exercise) {
+      let t = state.trackedWorkout.value.exercises[i]
+      state.trackedWorkout.value.exercises[i] = state.trackedWorkout.value.exercises[i+1]
+      state.trackedWorkout.value.exercises[i+1] = t
       break
     }
   }
 }
 
 function moveExerciseUp(exercise) {
-  for (let i = 1; i < appState.trackedWorkout.value.exercises.length; i++) {
-    if (appState.trackedWorkout.value.exercises[i] === exercise) {
-      let t = appState.trackedWorkout.value.exercises[i]
-      appState.trackedWorkout.value.exercises[i] = appState.trackedWorkout.value.exercises[i-1]
-      appState.trackedWorkout.value.exercises[i-1] = t
+  for (let i = 1; i < state.trackedWorkout.value.exercises.length; i++) {
+    if (state.trackedWorkout.value.exercises[i] === exercise) {
+      let t = state.trackedWorkout.value.exercises[i]
+      state.trackedWorkout.value.exercises[i] = state.trackedWorkout.value.exercises[i-1]
+      state.trackedWorkout.value.exercises[i-1] = t
       break
     }
   }
-
 }
 
 function moveWorkoutDown(workout) {
-  for (let i = 0; i < appState.workouts.value.length; i++) {
-    if (appState.workouts.value[i] === workout) {
-      if (i < appState.workouts.value.length - 1) {
-        let t = appState.workouts.value[i+1]
-        appState.workouts.value[i+1] = appState.workouts.value[i]
-        appState.workouts.value[i] = t
+  for (let i = 0; i < state.workouts.value.length; i++) {
+    if (state.workouts.value[i] === workout) {
+      if (i < state.workouts.value.length - 1) {
+        let t = state.workouts.value[i+1]
+        state.workouts.value[i+1] = state.workouts.value[i]
+        state.workouts.value[i] = t
       }
       break
     }
@@ -101,12 +99,12 @@ function moveWorkoutDown(workout) {
 }
 
 function moveWorkoutUp(workout) {
-  for (let i = 0; i < appState.workouts.value.length; i++) {
-    if (appState.workouts.value[i] === workout) {
+  for (let i = 0; i < state.workouts.value.length; i++) {
+    if (state.workouts.value[i] === workout) {
       if (i > 0) {
-        let t = appState.workouts.value[i]
-        appState.workouts.value[i] = appState.workouts.value[i-1]
-        appState.workouts.value[i-1] = t
+        let t = state.workouts.value[i]
+        state.workouts.value[i] = state.workouts.value[i-1]
+        state.workouts.value[i-1] = t
       }
       break
     }
@@ -114,29 +112,47 @@ function moveWorkoutUp(workout) {
 }
 
 function openTracker(workout) {
-  appState.page.value = types.pageTypes.Tracker
-  appState.trackedWorkout.value = workout
+  state.page.value = types.pageTypes.Tracker
+  state.trackedWorkout.value = workout
 }
 
 function closeTracker() {
-  appState.page.value = types.pageTypes.Home
-  appState.trackedWorkout.value = null
+  state.page.value = types.pageTypes.Home
+  state.trackedWorkout.value = null
+}
+
+// function saveTrackedWorkout() {
+//   console.log('called saveTrackedWorkout');
+//   firebase.write(db);
+// }
+
+function saveWorkouts() {
+  // TODO: Change this to write the actual workouts to firebase.
+  // For now, just send some toy data.
+  firebase.writeWorkouts(user.email, state.workouts.value);
+}
+
+function signout() {
+  firebase.signout();
 }
 
 </script>
 
 <template>
   <div class="container">
-    <Home v-if="appState.page.value === types.pageTypes.Home"
-        :workouts="appState.workouts.value" 
+    <Home v-if="state.page.value === types.pageTypes.Home"
+        :workouts="state.workouts.value" 
+        :user="user"
         @add-workout="addWorkout" 
         @click-workout="openTracker"
         @del-workout="delWorkout"
         @move-workout-up="moveWorkoutUp"
         @move-workout-down="moveWorkoutDown" 
+        @signout="signout"
+        @save-workouts="saveWorkouts"
     />
-    <Tracker v-else-if="appState.page.value === types.pageTypes.Tracker"
-        :workout = "appState.trackedWorkout.value"
+    <Tracker v-else-if="state.page.value === types.pageTypes.Tracker"
+        :workout = "state.trackedWorkout.value"
         @click-back="closeTracker"
         @add-exercise="addExercise"
         @del-exercise="delExercise"
@@ -144,6 +160,7 @@ function closeTracker() {
         @move-exercise-down="moveExerciseDown"
         @add-set="addSet"
         @del-set="delSet"
+        @save-tracked-workout="saveWorkouts"
     />
   </div>
 </template>
