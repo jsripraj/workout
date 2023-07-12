@@ -1,15 +1,14 @@
 <script setup>
-import { ref, watchEffect } from 'vue'
+import { ref, reactive, watch, watchEffect } from 'vue'
 import Home from './components/Home.vue'
 import Tracker from './components/Tracker.vue'
 
 import * as firebase from '/src/firebase.js';
 import * as types from '/src/types.js';
 
-console.log(`calling auth`)
-firebase.auth();
-console.log(`after calling auth`)
-const db = firebase.newFirestore();
+const user = reactive(new types.User());
+firebase.initAuthObserver(user);
+// const db = firebase.newFirestore();
 
 const appState = {
     page: ref(types.pageTypes.Home),
@@ -138,6 +137,7 @@ function signout() {
   <div class="container">
     <Home v-if="appState.page.value === types.pageTypes.Home"
         :workouts="appState.workouts.value" 
+        :user="user"
         @add-workout="addWorkout" 
         @click-workout="openTracker"
         @del-workout="delWorkout"

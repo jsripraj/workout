@@ -27,7 +27,7 @@ export class Set {
 }
 
 export class User {
-    constructor(name, email='', displayName='') {
+    constructor(email='', displayName='') {
         this.email = email 
         this.displayName = displayName
     }

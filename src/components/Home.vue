@@ -2,7 +2,9 @@
 
 import { ref, computed } from 'vue'
 
-defineProps(['workouts'])
+const props = defineProps(['workouts', 'user']);
+
+console.log(`prop: user = ${JSON.stringify(props.user)}`);
 
 const emit = defineEmits([
   'addWorkout', 
@@ -33,7 +35,8 @@ function addWorkout() {
     <div class="grid row-gap-5">
       <div class="row">
         <div class="col">
-          <p>Hello, name</p>
+          <!-- <p>Hello, {{ user.displayName }}</p> -->
+          <p>Hello, {{ user.displayName }}</p>
         </div>
         <div class="col">
           <button type="button" class="btn btn-warning" @click="$emit('signout')">Sign Out</button>
