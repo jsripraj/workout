@@ -122,18 +122,14 @@ export function signout() {
 }
 
 export async function writeWorkouts(email, data) {
+    console.log('called writeWorkouts');
+    console.log(`The data to try to write:\n${JSON.stringify(data)}`);
     try {
-        console.log('trying to add doc');
-        // const docRef = await addDoc(collection(db, "test"), {
-        //     first: "Kat",
-        //     last: "Wong", 
-        //     born: 1996,
-        // });
-        // console.log("Document written with ID: ", docRef.id);
+        console.log('trying to set workouts doc');
         await setDoc(doc(db, email, "workouts"), {
             workouts: data
         });
     } catch (e) {
-        console.error("Error adding document: ", e);
+        console.error("error setting document: ", e);
     }
 }

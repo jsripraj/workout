@@ -160,7 +160,7 @@ function signout() {
         @move-exercise-down="moveExerciseDown"
         @add-set="addSet"
         @del-set="delSet"
-        @save-tracked-workout="saveTrackedWorkout"
+        @save-tracked-workout="saveWorkouts"
     />
   </div>
 </template>
