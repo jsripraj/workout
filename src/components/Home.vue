@@ -4,7 +4,7 @@ import { ref, computed } from 'vue'
 
 const props = defineProps(['workouts', 'user']);
 
-console.log(`prop: user = ${JSON.stringify(props.user)}`);
+// console.log(`prop: user = ${JSON.stringify(props.user)}`);
 
 const emit = defineEmits([
   'addWorkout', 

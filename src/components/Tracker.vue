@@ -2,7 +2,10 @@
 
   import { ref, computed } from 'vue'
 
-  defineProps(['workout'])
+  const props = defineProps(['workout', 'historical']);
+  
+  // TODO: remove this debug statemnet
+  console.log(`value of prop historical = ${props.historical}`);
 
   const emit = defineEmits([
     'click-back', 
@@ -66,6 +69,8 @@
     selectedMonth.value = Object.keys(months).find(key => months[key] === now.getMonth());
     selectedDay.value = now.getDate();
   }
+
+  
 
 </script>
 

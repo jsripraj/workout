@@ -15,6 +15,8 @@ const state = {
     trackedWorkout: ref(),
 }
 
+let historical = false;
+
 // persist state -- eventually this will be stored in database
 watchEffect(() => {
   localStorage.setItem('workouts', JSON.stringify(state.workouts.value))
@@ -111,7 +113,11 @@ function moveWorkoutUp(workout) {
   }
 }
 
-function openTracker(workout) {
+function openTracker(workout, source='') {
+  historical = false;
+  if (source === 'history') {
+    historical = true;
+  } 
   state.page.value = types.pageTypes.Tracker
   state.trackedWorkout.value = workout
 }
@@ -153,6 +159,7 @@ function signout() {
     />
     <Tracker v-else-if="state.page.value === types.pageTypes.Tracker"
         :workout = "state.trackedWorkout.value"
+        :historical="historical"
         @click-back="closeTracker"
         @add-exercise="addExercise"
         @del-exercise="delExercise"
