@@ -3,9 +3,6 @@
   import { ref, computed } from 'vue'
 
   const props = defineProps(['workout', 'historical']);
-  
-  // TODO: remove this debug statemnet
-  console.log(`value of prop historical = ${props.historical}`);
 
   const emit = defineEmits([
     'click-back', 

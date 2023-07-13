@@ -85,7 +85,8 @@ function addWorkout() {
 
       <div class="row">
         <div class="col">
-          <button type="button" class="btn btn-primary" @click="editing = !editing">{{ editBtnMsg }}</button>
+          <button v-if="!editing" type="button" class="btn btn-primary" @click="editing = !editing">{{ editBtnMsg }}</button>
+          <button v-if="editing" type="button" class="btn btn-warning" @click="editing = !editing">{{ editBtnMsg }}</button>
         </div>
       </div>
       <div class = "row">
