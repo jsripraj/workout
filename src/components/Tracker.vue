@@ -74,9 +74,7 @@
       <p class="display-2">{{ workout.name }}</p>
       <div class="row">
         <div class="col">
-          <select v-model="selectedYear" class="form-select">
-            <option v-for="year in getYears()">{{ year }}</option>
-          </select>
+          <button type="button" class="btn btn-light">Today</button>
         </div>
         <div class="col">
           <select v-model="selectedMonth" class="form-select">
@@ -86,6 +84,11 @@
         <div class="col">
           <select class="form-select">
             <option v-for="day in getDays()">{{ day }}</option>
+          </select>
+        </div>
+        <div class="col">
+          <select v-model="selectedYear" class="form-select">
+            <option v-for="year in getYears()">{{ year }}</option>
           </select>
         </div>
       </div>
