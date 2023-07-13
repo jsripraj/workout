@@ -15,6 +15,8 @@
     'saveTrackedWorkout',
   ])
 
+  const startYear = 2000;
+
   const editing = ref(false)
 
   const newExercise = ref('')
@@ -27,6 +29,11 @@
     const value = newExercise.value
     emit('addExercise', value)
     newExercise.value = ''
+  }
+
+  function getYears() {
+    const curYear = new Date().getFullYear();
+    return [...Array(curYear - startYear + 1).keys()].map(y => y + startYear).reverse();
   }
 
 </script>
@@ -42,7 +49,9 @@
       </button>
     </div>
       <p class="display-2">{{ workout.name }}</p>
-      <h2>{{ new Date().toDateString() }}</h2>
+      <select class="form-select">
+        <option v-for="year in getYears()">{{ year }}</option>
+      </select>
       <div v-if="editing">
         <input
           type="text"
