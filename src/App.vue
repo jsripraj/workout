@@ -25,12 +25,19 @@ watchEffect(() => {
 
 function addExercise(exName) {
   if (exName) {
-    state.trackedWorkout.value.exercises.push(new types.Exercise(exName))
+    state.trackedWorkout.value.exercises.push({
+      name: exName,
+      sets: [],
+    });
   }
 }
 
 function addSet(exercise) {
-  exercise.sets.push(new types.Set(`${exercise.sets.length + 1}`))
+  exercise.sets.push({
+    name: exercise.sets.length + 1,
+    weight: null,
+    reps: null,
+  });
 }
 
 function delSet(exercise) {
@@ -39,7 +46,13 @@ function delSet(exercise) {
 
 function addWorkout(woName) {
   if (woName) {
-    state.workouts.value.push(new types.Workout(woName))
+    state.workouts.value.push({
+      name: woName,
+      date: new Date(),
+      description: "Sample description",
+      exercises: [],
+    })
+    writeCurrentWorkouts();
   }
 }
 
@@ -127,15 +140,8 @@ function closeTracker() {
   state.trackedWorkout.value = null
 }
 
-// function saveTrackedWorkout() {
-//   console.log('called saveTrackedWorkout');
-//   firebase.write(db);
-// }
-
-function saveWorkouts() {
-  // TODO: Change this to write the actual workouts to firebase.
-  // For now, just send some toy data.
-  firebase.writeWorkouts(user.email, state.workouts.value);
+function writeCurrentWorkouts() {
+  firebase.writeCurrentWorkouts(user.email, state.workouts.value);
 }
 
 function signout() {
@@ -155,7 +161,7 @@ function signout() {
         @move-workout-up="moveWorkoutUp"
         @move-workout-down="moveWorkoutDown" 
         @signout="signout"
-        @save-workouts="saveWorkouts"
+        @save-workouts="writeCurrentWorkouts"
     />
     <Tracker v-else-if="state.page.value === types.pageTypes.Tracker"
         :workout = "state.trackedWorkout.value"
