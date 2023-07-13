@@ -25,12 +25,19 @@ watchEffect(() => {
 
 function addExercise(exName) {
   if (exName) {
-    state.trackedWorkout.value.exercises.push(new types.Exercise(exName))
+    state.trackedWorkout.value.exercises.push({
+      name: exName,
+      sets: [],
+    });
   }
 }
 
 function addSet(exercise) {
-  exercise.sets.push(new types.Set(`${exercise.sets.length + 1}`))
+  exercise.sets.push({
+    name: exercise.sets.length + 1,
+    weight: null,
+    reps: null,
+  });
 }
 
 function delSet(exercise) {
@@ -39,7 +46,12 @@ function delSet(exercise) {
 
 function addWorkout(woName) {
   if (woName) {
-    state.workouts.value.push(new types.Workout(woName))
+    state.workouts.value.push({
+      name: woName,
+      date: new Date(),
+      description: "Sample description",
+      exercises: [],
+    })
   }
 }
 
