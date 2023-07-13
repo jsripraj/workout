@@ -114,11 +114,10 @@ function moveWorkoutUp(workout) {
 }
 
 function openTracker(workout, source='') {
+  historical = false;
   if (source === 'history') {
     historical = true;
-  } else {
-    historical = false;
-  }
+  } 
   state.page.value = types.pageTypes.Tracker
   state.trackedWorkout.value = workout
 }
