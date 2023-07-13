@@ -6,7 +6,7 @@ export const pageTypes = {
 export class Workout {
   constructor(name) {
     this.name = name
-    this.date = ''
+    this.date = new Date();
     this.description = "Sample description describes the workout and any notes the user wants to include"
     this.exercises = []
   }
