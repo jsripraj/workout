@@ -15,6 +15,24 @@
     'saveTrackedWorkout',
   ])
 
+  const startYear = 2000;
+  const months = {
+    January: 0,
+    February: 1,
+    March: 2, 
+    April: 3, 
+    May: 4, 
+    June: 5, 
+    July: 6, 
+    August: 7, 
+    September: 8, 
+    October: 9, 
+    November: 10, 
+    December: 11
+  };
+  const selectedYear = ref(startYear);
+  const selectedMonth= ref('January');
+
   const editing = ref(false)
 
   const newExercise = ref('')
@@ -27,6 +45,18 @@
     const value = newExercise.value
     emit('addExercise', value)
     newExercise.value = ''
+  }
+
+  function getYears() {
+    const curYear = new Date().getFullYear();
+    return [...Array(curYear - startYear + 1).keys()].map(y => y + startYear).reverse();
+  }
+
+  function getDays() {
+    const year = selectedYear.value;
+    const month = months[selectedMonth.value];
+    const numDaysInMonth = new Date(year, month+1, 0).getDate(); 
+    return [...Array(numDaysInMonth).keys()].map(d => d+1);
   }
 
 </script>
@@ -42,7 +72,23 @@
       </button>
     </div>
       <p class="display-2">{{ workout.name }}</p>
-      <h2>{{ new Date().toDateString() }}</h2>
+      <div class="row">
+        <div class="col">
+          <select v-model="selectedYear" class="form-select">
+            <option v-for="year in getYears()">{{ year }}</option>
+          </select>
+        </div>
+        <div class="col">
+          <select v-model="selectedMonth" class="form-select">
+            <option v-for="month in Object.keys(months)">{{ month }}</option>
+          </select>
+        </div>
+        <div class="col">
+          <select class="form-select">
+            <option v-for="day in getDays()">{{ day }}</option>
+          </select>
+        </div>
+      </div>
       <div v-if="editing">
         <input
           type="text"
