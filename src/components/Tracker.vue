@@ -31,7 +31,8 @@
     December: 11
   };
   const selectedYear = ref(startYear);
-  const selectedMonth= ref('January');
+  const selectedMonth = ref('January');
+  const selectedDay = ref(1);
 
   const editing = ref(false)
 
@@ -59,6 +60,13 @@
     return [...Array(numDaysInMonth).keys()].map(d => d+1);
   }
 
+  function today() {
+    const now = new Date();
+    selectedYear.value = now.getFullYear();
+    selectedMonth.value = Object.keys(months).find(key => months[key] === now.getMonth());
+    selectedDay.value = now.getDate();
+  }
+
 </script>
 
 <template>
@@ -74,7 +82,7 @@
       <p class="display-2">{{ workout.name }}</p>
       <div class="row">
         <div class="col">
-          <button type="button" class="btn btn-light">Today</button>
+          <button @click="today()" type="button" class="btn btn-light">Today</button>
         </div>
         <div class="col">
           <select v-model="selectedMonth" class="form-select">
@@ -82,7 +90,7 @@
           </select>
         </div>
         <div class="col">
-          <select class="form-select">
+          <select v-model="selectedDay" class="form-select">
             <option v-for="day in getDays()">{{ day }}</option>
           </select>
         </div>
