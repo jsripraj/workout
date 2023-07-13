@@ -13,20 +13,24 @@ const emit = defineEmits([
   'moveWorkoutUp', 
   'moveWorkoutDown',
   'signout',
-  'saveWorkouts',
 ])
 
 const editing = ref(false)
 const newWorkout = ref('')
 
 const editBtnMsg = computed(() => {
-  return editing.value ? 'Done' : 'Edit Workouts'
+  return editing.value ? 'Save' : 'Edit Workouts'
 })
 
 function addWorkout() {
     const value = newWorkout.value
     emit('addWorkout', value)
     newWorkout.value = ''
+}
+
+function saveWorkouts() {
+  editing.value = false;
+  emit('saveWorkouts');
 }
 
 </script>
@@ -86,12 +90,7 @@ function addWorkout() {
       <div class="row">
         <div class="col">
           <button v-if="!editing" type="button" class="btn btn-primary" @click="editing = !editing">{{ editBtnMsg }}</button>
-          <button v-if="editing" type="button" class="btn btn-warning" @click="editing = !editing">{{ editBtnMsg }}</button>
-        </div>
-      </div>
-      <div class = "row">
-        <div class="col">
-          <button v-if="!editing" type="button" class="btn btn-primary" @click="$emit('saveWorkouts')">Save Workouts</button>
+          <button v-if="editing" type="button" class="btn btn-warning" @click="saveWorkouts">{{ editBtnMsg }}</button>
         </div>
       </div>
     </div>

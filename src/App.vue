@@ -52,6 +52,7 @@ function addWorkout(woName) {
       description: "Sample description",
       exercises: [],
     })
+    writeCurrentWorkouts();
   }
 }
 
@@ -139,14 +140,7 @@ function closeTracker() {
   state.trackedWorkout.value = null
 }
 
-// function saveTrackedWorkout() {
-//   console.log('called saveTrackedWorkout');
-//   firebase.write(db);
-// }
-
 function writeCurrentWorkouts() {
-  // TODO: Change this to write the actual workouts to firebase.
-  // For now, just send some toy data.
   firebase.writeCurrentWorkouts(user.email, state.workouts.value);
 }
 
