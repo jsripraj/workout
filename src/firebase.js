@@ -43,9 +43,9 @@ export function signout() {
     signOut(getAuth(app));
 }
 
-export async function writeWorkouts(email, data) {
+export async function writeCurrentWorkouts(email, data) {
     try {
-        await setDoc(doc(db, email, "workouts"), {
+        await setDoc(doc(db, email, "current"), {
             workouts: data
         });
     } catch (e) {
