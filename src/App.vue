@@ -137,11 +137,15 @@ function openTracker(workout, source='') {
 
 function closeTracker() {
   state.page.value = types.pageTypes.Home
-  state.trackedWorkout.value = null
+  // state.trackedWorkout.value = null
 }
 
 function writeCurrentWorkouts() {
   firebase.writeCurrentWorkouts(user.email, state.workouts.value);
+}
+
+function writeWorkoutToHistory() {
+  firebase.writeWorkoutToHistory(user.email, state.trackedWorkout.value);
 }
 
 function signout() {
@@ -173,7 +177,7 @@ function signout() {
         @move-exercise-down="moveExerciseDown"
         @add-set="addSet"
         @del-set="delSet"
-        @save-tracked-workout="saveWorkouts"
+        @save-to-history="writeWorkoutToHistory"
     />
   </div>
 </template>
