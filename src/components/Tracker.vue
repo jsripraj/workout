@@ -42,6 +42,8 @@
     return editing.value ? 'Done' : 'Edit Exercises'
   })
 
+  const cached = JSON.parse(JSON.stringify(props.workout));
+
   function addExercise() {
     const value = newExercise.value
     emit('addExercise', value)
