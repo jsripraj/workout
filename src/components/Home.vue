@@ -4,8 +4,6 @@ import { ref, computed } from 'vue'
 
 const props = defineProps(['workouts', 'user']);
 
-// console.log(`prop: user = ${JSON.stringify(props.user)}`);
-
 const emit = defineEmits([
   'addWorkout', 
   'clickWorkout', 
@@ -13,6 +11,7 @@ const emit = defineEmits([
   'moveWorkoutUp', 
   'moveWorkoutDown',
   'signout',
+  'saveWorkouts',
 ])
 
 const editing = ref(false)
@@ -40,7 +39,6 @@ function saveWorkouts() {
     <div class="grid row-gap-5">
       <div class="row">
         <div class="col">
-          <!-- <p>Hello, {{ user.displayName }}</p> -->
           <p>Hello, {{ user.displayName }}</p>
         </div>
         <div class="col">

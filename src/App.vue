@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, watch, watchEffect } from 'vue'
+import { ref, reactive, watch } from 'vue'
 import Home from './components/Home.vue'
 import Tracker from './components/Tracker.vue'
 
@@ -11,16 +11,16 @@ firebase.initAuthObserver(user);
 
 const state = {
     page: ref(types.pageTypes.Home),
-    workouts: ref(JSON.parse(localStorage.getItem('workouts') || '[]')),
-    trackedWorkout: ref(),
+    workouts: ref([]),
+    trackedWorkout: ref({}),
 }
 
 let historical = false;
 
-// persist state -- eventually this will be stored in database
-watchEffect(() => {
-  localStorage.setItem('workouts', JSON.stringify(state.workouts.value))
-  // localStorage.setItem('workouts', JSON.stringify([]))
+watch(user, (populatedUser, _) => {
+  if (populatedUser.email) {
+    firebase.getCurrentWorkouts(user.email, state.workouts);
+  }
 })
 
 function addExercise(exName) {
