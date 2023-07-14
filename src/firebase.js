@@ -3,6 +3,7 @@ import {
     getFirestore, 
     doc, 
     setDoc,
+    getDoc,
 } from 'firebase/firestore/lite';
 import { 
     GoogleAuthProvider,
@@ -41,6 +42,23 @@ export function initAuthObserver(vueUser) {
 export function signout() {
     console.log('signed out')
     signOut(getAuth(app));
+}
+
+export async function getCurrentWorkouts(email, workouts) {
+    if (email) {
+        const docRef = doc(db, email, "current");
+        await getDoc(docRef)
+            .then((docSnap) => {
+                if (docSnap.exists()) {
+                    workouts.value = docSnap.data().workouts;
+                } else {
+                    console.error("No such document!");
+                }
+            })
+            .catch((err) => {
+                console.error('get doc: ', err);
+            })
+    }
 }
 
 export async function writeCurrentWorkouts(email, data) {
