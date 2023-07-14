@@ -15,6 +15,8 @@ import {
     signOut,
 } from "firebase/auth";
 
+import * as types from '/src/types.js';
+
 const firebaseConfig = {
   apiKey: "AIzaSyDCtB516R6TQv2wx-Ikf0-AsMxDlJhJmZw",
   authDomain: "workout-13516.firebaseapp.com",
@@ -23,9 +25,6 @@ const firebaseConfig = {
   messagingSenderId: "444100980841",
   appId: "1:444100980841:web:f41022017841f08bf1f2f8"
 };
-
-const _docNameHistory = "history";
-const _docNameCurrent = "current";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app)
@@ -46,7 +45,7 @@ export function initAuthObserver(vueUser) {
 
 export async function getCurrentWorkouts(email, workouts) {
     if (email) {
-        const docRef = doc(db, email, _docNameCurrent);
+        const docRef = doc(db, email, types._docNameCurrent);
         await getDoc(docRef)
             .then((docSnap) => {
                 if (docSnap.exists()) {
@@ -63,7 +62,7 @@ export async function getCurrentWorkouts(email, workouts) {
 
 export async function writeCurrentWorkouts(email, data) {
     try {
-        await setDoc(doc(db, email, _docNameCurrent), {
+        await setDoc(doc(db, email, types._docNameCurrent), {
             workouts: data
         });
     } catch (e) {
@@ -72,7 +71,7 @@ export async function writeCurrentWorkouts(email, data) {
 }
 
 export async function writeWorkoutToHistory(email, workout) {
-    const docRef = doc(db, email, _docNameHistory);
+    const docRef = doc(db, email, types._docNameHistory);
     try {
         await updateDoc(docRef, {workouts: arrayUnion(workout)});
     } catch (err) {

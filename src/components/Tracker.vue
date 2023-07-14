@@ -2,6 +2,8 @@
 
   import { ref, computed } from 'vue'
 
+  import * as types from '/src/types.js';
+
   const props = defineProps(['workout', 'historical']);
 
   const emit = defineEmits([
@@ -15,23 +17,10 @@
     'saveToHistory',
   ])
 
-  const startYear = 2000;
-  const months = {
-    January: 0,
-    February: 1,
-    March: 2, 
-    April: 3, 
-    May: 4, 
-    June: 5, 
-    July: 6, 
-    August: 7, 
-    September: 8, 
-    October: 9, 
-    November: 10, 
-    December: 11
-  };
-  const selectedYear = ref(startYear);
+  const selectedYear = ref(types._startYear);
+
   const selectedMonth = ref('January');
+
   const selectedDay = ref(1);
 
   const editing = ref(false)
@@ -52,12 +41,12 @@
 
   function getYears() {
     const curYear = new Date().getFullYear();
-    return [...Array(curYear - startYear + 1).keys()].map(y => y + startYear).reverse();
+    return [...Array(curYear - types._startYear + 1).keys()].map(y => y + types._startYear).reverse();
   }
 
   function getDays() {
     const year = selectedYear.value;
-    const month = months[selectedMonth.value];
+    const month = types._months[selectedMonth.value];
     const numDaysInMonth = new Date(year, month+1, 0).getDate(); 
     return [...Array(numDaysInMonth).keys()].map(d => d+1);
   }
@@ -65,12 +54,9 @@
   function today() {
     const now = new Date();
     selectedYear.value = now.getFullYear();
-    selectedMonth.value = Object.keys(months).find(key => months[key] === now.getMonth());
+    selectedMonth.value = Object.keys(types._months).find(key => types._months[key] === now.getMonth());
     selectedDay.value = now.getDate();
   }
-
-  
-
 </script>
 
 <template>
@@ -90,7 +76,7 @@
         </div>
         <div class="col">
           <select v-model="selectedMonth" class="form-select">
-            <option v-for="month in Object.keys(months)">{{ month }}</option>
+            <option v-for="month in Object.keys(types._months)">{{ month }}</option>
           </select>
         </div>
         <div class="col">

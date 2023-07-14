@@ -15,6 +15,7 @@ const emit = defineEmits([
 ])
 
 const editing = ref(false)
+
 const newWorkout = ref('')
 
 const editBtnMsg = computed(() => {
@@ -31,7 +32,6 @@ function saveWorkouts() {
   editing.value = false;
   emit('saveWorkouts');
 }
-
 </script>
 
 <template>

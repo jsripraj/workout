@@ -1,8 +1,8 @@
 <script setup>
 import { ref, reactive, watch } from 'vue'
+
 import Home from './components/Home.vue'
 import Tracker from './components/Tracker.vue'
-
 import * as firebase from '/src/firebase.js';
 import * as types from '/src/types.js';
 
