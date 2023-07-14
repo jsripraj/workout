@@ -3,6 +3,9 @@ export const pageTypes = {
     Tracker: 'tracker'
 }
 
+export const _docNameHistory = "history";
+export const _docNameCurrent = "current";
+
 export class User {
     constructor(email='', displayName='') {
         this.email = email 
