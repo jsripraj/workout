@@ -4,6 +4,8 @@ import {
     doc, 
     setDoc,
     getDoc,
+    updateDoc,
+    arrayUnion,
 } from 'firebase/firestore/lite';
 import { 
     GoogleAuthProvider,
@@ -22,6 +24,9 @@ const firebaseConfig = {
   appId: "1:444100980841:web:f41022017841f08bf1f2f8"
 };
 
+const _docNameHistory = "history";
+const _docNameCurrent = "current";
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app)
 const db = getFirestore(app);
@@ -39,20 +44,15 @@ export function initAuthObserver(vueUser) {
     });
 }
 
-export function signout() {
-    console.log('signed out')
-    signOut(getAuth(app));
-}
-
 export async function getCurrentWorkouts(email, workouts) {
     if (email) {
-        const docRef = doc(db, email, "current");
+        const docRef = doc(db, email, _docNameCurrent);
         await getDoc(docRef)
             .then((docSnap) => {
                 if (docSnap.exists()) {
                     workouts.value = docSnap.data().workouts;
                 } else {
-                    console.error("No such document!");
+                    console.log("No current workouts!");
                 }
             })
             .catch((err) => {
@@ -63,10 +63,35 @@ export async function getCurrentWorkouts(email, workouts) {
 
 export async function writeCurrentWorkouts(email, data) {
     try {
-        await setDoc(doc(db, email, "current"), {
+        await setDoc(doc(db, email, _docNameCurrent), {
             workouts: data
         });
     } catch (e) {
-        console.error("error setting document: ", e);
+        console.error("set doc: ", e);
     }
+}
+
+export async function writeWorkoutToHistory(email, workout) {
+    const docRef = doc(db, email, _docNameHistory);
+    try {
+        await updateDoc(docRef, {workouts: arrayUnion(workout)});
+    } catch (err) {
+        console.log(`in error handling`);
+        await getDoc(docRef)
+            .then(async (docSnap) => {
+                if (docSnap.exists()) {
+                    throw new Error("existing doc: ", err);
+                } else {
+                    console.log('setting doc');
+                    await setDoc(docRef, {workouts: []})
+                }
+            })
+            .then(async () => {await updateDoc(docRef, {workouts: arrayUnion(workout)})})
+            .catch((err) => {console.error("update history doc with array union: ", err)})
+    }
+}
+
+export function signout() {
+    console.log('signed out')
+    signOut(getAuth(app));
 }

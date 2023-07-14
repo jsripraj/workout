@@ -12,7 +12,7 @@
     'moveExerciseDown',
     'addSet',
     'delSet',
-    'saveTrackedWorkout',
+    'saveToHistory',
   ])
 
   const startYear = 2000;
@@ -185,7 +185,7 @@
         <button @click="editing = !editing">{{ editBtnMsg }}</button>
       </div>
       <div class="row">
-        <button @click="$emit('saveTrackedWorkout'); $emit('click-back')">Save to History</button>
+        <button @click="$emit('saveToHistory'); $emit('click-back')">Save to History</button>
       </div>
     </section>
   </div>
