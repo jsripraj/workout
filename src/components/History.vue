@@ -11,9 +11,12 @@ const emit = defineEmits([
     'openTracker',
 ]);
 
+// TODO: Does this work?
 function getDate(workout) {
-    const date = workout.date.toDate();
-    return date.getMonth() + '/' + date.getDate() + '/' + date.getFullYear();
+    console.log(`before, workout.date = ${JSON.stringify(workout.date)}`);
+    const date = workout.date;
+    console.log(`after: date = ${date}`);
+    return (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
 }
 
 </script>

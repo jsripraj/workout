@@ -20,9 +20,9 @@ const state = {
     historicalWorkouts: ref([]),
 }
 
-watch(state.historicalWorkouts, (workouts, _) => {
+watch(state.historicalWorkouts, () => {
     state.historicalWorkouts.value.sort((workoutA, workoutB) => {
-      return workoutB.date.toDate().getTime() - workoutA.date.toDate().getTime();
+      return workoutB.date.getTime() - workoutA.date.getTime();
     });
 });
 
