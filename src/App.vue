@@ -14,6 +14,7 @@ const state = {
     page: ref(types.pageTypes.Home),
     currentWorkouts: ref([]),
     trackedWorkout: ref({}),
+    cachedWorkout: {},
     prevPage: types.pageTypes.Home, // so Tracker knows where to go back to 
     historyAltered: true,
     historicalWorkouts: ref([]),
@@ -69,6 +70,11 @@ function closeHistory() {
 }
 
 function closeTracker() {
+  if (state.prevPage === types.pageTypes.History) {
+
+  } else {
+
+  }
   state.page.value = state.prevPage;
 }
 
@@ -152,6 +158,7 @@ function openHistory() {
 }
 
 function openTracker(workout) {
+  state.cachedWorkout = JSON.parse(JSON.stringify(workout));
   state.prevPage = state.page.value;
   state.page.value = types.pageTypes.Tracker
   state.trackedWorkout.value = workout
