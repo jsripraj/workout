@@ -19,6 +19,16 @@ const state = {
     historicalWorkouts: ref([]),
 }
 
+watch(state.historicalWorkouts, (workouts, _) => {
+    console.log(`before sort: ${state.historicalWorkouts.value}`);
+    // Sort workouts so most-recent is first
+    state.historicalWorkouts.value.sort((workoutA, workoutB) => {
+      console.log(`workoutA.date = ${workoutA.date}`);
+      return workoutB.date.toDate().getTime() - workoutA.date.toDate().getTime();
+    });
+    console.log(`after sort: ${state.historicalWorkouts.value}`);
+});
+
 watch(user, (populatedUser, _) => {
   if (populatedUser.email) {
     firebase.getCurrentWorkouts(user.email, state.currentWorkouts);
@@ -138,10 +148,11 @@ function moveWorkoutUp(workout) {
 
 function openHistory() {
   if (state.historyAltered) {
+    console.log('history altered!');
     firebase.getHistoricalWorkouts(user.email, state.historicalWorkouts);
+    state.historyAltered = false;
+    state.page.value = types.pageTypes.History;
   }
-  state.historyAltered = false;
-  state.page.value = types.pageTypes.History;
 }
 
 function openTracker(workout) {
