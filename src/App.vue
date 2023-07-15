@@ -14,9 +14,9 @@ const state = {
     page: ref(types.pageTypes.Home),
     workouts: ref([]),
     trackedWorkout: ref({}),
+    trackedIsHistorical: false,
+    historyAltered: true,
 }
-
-let historical = false;
 
 watch(user, (populatedUser, _) => {
   if (populatedUser.email) {
@@ -137,9 +137,9 @@ function openHistory() {
 }
 
 function openTracker(workout, source='') {
-  historical = false;
+  state.trackedIsHistorical = false;
   if (source === 'history') {
-    historical = true;
+    state.trackedIsHistorical = true;
   } 
   state.page.value = types.pageTypes.Tracker
   state.trackedWorkout.value = workout
@@ -151,6 +151,7 @@ function writeCurrentWorkouts() {
 
 function writeWorkoutToHistory() {
   firebase.writeWorkoutToHistory(user.email, state.trackedWorkout.value);
+  state.historyAltered = true;
 }
 
 function signout() {
@@ -175,7 +176,7 @@ function signout() {
     />
     <Tracker v-else-if="state.page.value === types.pageTypes.Tracker"
         :workout = "state.trackedWorkout.value"
-        :historical="historical"
+        :historical="state.trackedIsHistorical"
         @click-back="closeTracker"
         @add-exercise="addExercise"
         @del-exercise="delExercise"
