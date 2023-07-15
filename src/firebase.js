@@ -87,7 +87,7 @@ export async function writeCurrentWorkouts(email, data) {
     }
 }
 
-export async function writeWorkoutToHistory(email, workout) {
+export async function writeWorkoutToHistory(email, cached, workout) {
     const docRef = doc(db, email, types._docNameHistory);
     try {
         await updateDoc(docRef, {workouts: arrayUnion(workout)});

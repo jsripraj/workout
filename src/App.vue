@@ -169,7 +169,7 @@ function writeCurrentWorkouts() {
 }
 
 function writeWorkoutToHistory() {
-  firebase.writeWorkoutToHistory(user.email, state.trackedWorkout.value);
+  firebase.writeWorkoutToHistory(user.email, state.cachedWorkout, state.trackedWorkout.value);
   state.historyAltered = true;
 }
 
