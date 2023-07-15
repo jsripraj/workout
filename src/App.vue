@@ -23,7 +23,6 @@ watch(state.historicalWorkouts, (workouts, _) => {
     state.historicalWorkouts.value.sort((workoutA, workoutB) => {
       return workoutB.date.toDate().getTime() - workoutA.date.toDate().getTime();
     });
-    console.log(`after sort: ${state.historicalWorkouts.value}`);
 });
 
 watch(user, (populatedUser, _) => {
