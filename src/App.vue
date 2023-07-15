@@ -59,7 +59,6 @@ function addWorkout(woName) {
 
 function closeTracker() {
   state.page.value = types.pageTypes.Home
-  // state.trackedWorkout.value = null
 }
 
 function delExercise(exercise) {
@@ -177,7 +176,7 @@ function signout() {
     <Tracker v-else-if="state.page.value === types.pageTypes.Tracker"
         :workout = "state.trackedWorkout.value"
         :historical="state.trackedIsHistorical"
-        @click-back="closeTracker"
+        @close-tracker="closeTracker"
         @add-exercise="addExercise"
         @del-exercise="delExercise"
         @move-exercise-up="moveExerciseUp"
