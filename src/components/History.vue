@@ -1,6 +1,8 @@
 <script setup>
 
+import { Timestamp } from 'firebase/firestore/lite';
 import { ref, computed } from 'vue'
+import { writeWorkoutToHistory } from '../firebase';
 
 const props = defineProps(['workouts']);
 
@@ -8,6 +10,12 @@ const emit = defineEmits([
     'close-history',
     'openTracker',
 ]);
+
+function getDate(workout) {
+    const date = workout.date.toDate();
+    return date.getMonth() + '/' + date.getDate() + '/' + date.getFullYear();
+}
+
 </script>
 
 <template>
@@ -29,11 +37,14 @@ const emit = defineEmits([
         </div>
       </div>
 
-      <div class="row">
-        <div class="col">
-          <div v-for="workout in workouts">
-            <h2 @click="$emit('openTracker', workout)">{{ workout.name }}</h2>
-          </div>
+    <div v-for="workout in workouts">
+        <div class="row">
+            <div class="col">
+                <h2>{{ getDate(workout) }}</h2>
+            </div>
+            <div class="col">
+                <h2 @click="$emit('openTracker', workout)">{{ workout.name }}</h2>
+            </div>
         </div>
       </div>
     </div>
