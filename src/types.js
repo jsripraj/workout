@@ -1,6 +1,7 @@
 export const pageTypes = {
     Home: 'home',
-    Tracker: 'tracker'
+    Tracker: 'tracker',
+    History: 'history',
 }
 
 export const _docNameHistory = "history";

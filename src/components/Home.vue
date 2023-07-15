@@ -12,6 +12,7 @@ const emit = defineEmits([
   'moveWorkoutDown',
   'signout',
   'saveWorkouts',
+  'openHistory',
 ])
 
 const editing = ref(false)
@@ -89,6 +90,11 @@ function saveWorkouts() {
         <div class="col">
           <button v-if="!editing" type="button" class="btn btn-primary" @click="editing = !editing">{{ editBtnMsg }}</button>
           <button v-if="editing" type="button" class="btn btn-warning" @click="saveWorkouts">{{ editBtnMsg }}</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <button type="button" class="btn btn-primary" @click="$emit('openHistory')">History</button>
         </div>
       </div>
     </div>

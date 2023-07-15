@@ -132,6 +132,10 @@ function moveWorkoutUp(workout) {
   }
 }
 
+function openHistory() {
+  state.page.value = types.pageTypes.History;
+}
+
 function openTracker(workout, source='') {
   historical = false;
   if (source === 'history') {
@@ -167,6 +171,7 @@ function signout() {
         @move-workout-down="moveWorkoutDown" 
         @signout="signout"
         @save-workouts="writeCurrentWorkouts"
+        @open-history="openHistory"
     />
     <Tracker v-else-if="state.page.value === types.pageTypes.Tracker"
         :workout = "state.trackedWorkout.value"
