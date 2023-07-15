@@ -57,6 +57,10 @@ function addWorkout(woName) {
   }
 }
 
+function closeHistory() {
+  state.page.value = types.pageTypes.Home
+}
+
 function closeTracker() {
   state.page.value = types.pageTypes.Home
 }
@@ -186,6 +190,7 @@ function signout() {
         @save-to-history="writeWorkoutToHistory"
     />
     <History v-else
+        @close-history="closeHistory"
     />
   </div>
 </template>
