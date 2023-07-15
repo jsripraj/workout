@@ -7,7 +7,7 @@
   const props = defineProps(['workout', 'historical']);
 
   const emit = defineEmits([
-    'click-back', 
+    'close-tracker', 
     'addExercise', 
     'delExercise',
     'moveExerciseUp',
@@ -51,6 +51,11 @@
     return [...Array(numDaysInMonth).keys()].map(d => d+1);
   }
 
+  function saveToHistory() {
+    props.workout.date = new Date(selectedYear.value, types._months[selectedMonth.value], selectedDay.value);
+    emit('saveToHistory');
+  }
+
   function today() {
     const now = new Date();
     selectedYear.value = now.getFullYear();
@@ -66,7 +71,7 @@
         type="button" 
         class="btn-close position-relative top-0 start-0 mt-3" 
         aria-label="CLose" 
-        @click="$emit('click-back')">
+        @click="$emit('close-tracker')">
       </button>
     </div>
       <p class="display-2">{{ workout.name }}</p>
@@ -171,7 +176,7 @@
         <button @click="editing = !editing">{{ editBtnMsg }}</button>
       </div>
       <div class="row">
-        <button @click="$emit('saveToHistory'); $emit('click-back')">Save to History</button>
+        <button @click="saveToHistory(); $emit('close-tracker')">Save to History</button>
       </div>
     </section>
   </div>

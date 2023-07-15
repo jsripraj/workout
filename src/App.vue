@@ -3,6 +3,7 @@ import { ref, reactive, watch } from 'vue'
 
 import Home from './components/Home.vue'
 import Tracker from './components/Tracker.vue'
+import History from './components/History.vue'
 import * as firebase from '/src/firebase.js';
 import * as types from '/src/types.js';
 
@@ -11,15 +12,26 @@ firebase.initAuthObserver(user);
 
 const state = {
     page: ref(types.pageTypes.Home),
-    workouts: ref([]),
+    currentWorkouts: ref([]),
     trackedWorkout: ref({}),
+    prevPage: types.pageTypes.Home, // so Tracker knows where to go back to 
+    historyAltered: true,
+    historicalWorkouts: ref([]),
 }
 
-let historical = false;
+watch(state.historicalWorkouts, (workouts, _) => {
+    console.log(`before sort: ${state.historicalWorkouts.value}`);
+    // Sort workouts so most-recent is first
+    state.historicalWorkouts.value.sort((workoutA, workoutB) => {
+      console.log(`workoutA.date = ${workoutA.date}`);
+      return workoutB.date.toDate().getTime() - workoutA.date.toDate().getTime();
+    });
+    console.log(`after sort: ${state.historicalWorkouts.value}`);
+});
 
 watch(user, (populatedUser, _) => {
   if (populatedUser.email) {
-    firebase.getCurrentWorkouts(user.email, state.workouts);
+    firebase.getCurrentWorkouts(user.email, state.currentWorkouts);
   }
 })
 
@@ -46,7 +58,7 @@ function delSet(exercise) {
 
 function addWorkout(woName) {
   if (woName) {
-    state.workouts.value.push({
+    state.currentWorkouts.value.push({
       name: woName,
       date: new Date(),
       description: "Sample description",
@@ -54,6 +66,14 @@ function addWorkout(woName) {
     })
     writeCurrentWorkouts();
   }
+}
+
+function closeHistory() {
+  state.page.value = types.pageTypes.Home
+}
+
+function closeTracker() {
+  state.page.value = state.prevPage;
 }
 
 function delExercise(exercise) {
@@ -69,9 +89,9 @@ function delExercise(exercise) {
 
 function delWorkout(workout) {
   let i = 0
-  for (const w of state.workouts.value) {
+  for (const w of state.currentWorkouts.value) {
     if (w === workout) {
-      state.workouts.value.splice(i, 1)
+      state.currentWorkouts.value.splice(i, 1)
       break
     }
     i++
@@ -101,12 +121,12 @@ function moveExerciseUp(exercise) {
 }
 
 function moveWorkoutDown(workout) {
-  for (let i = 0; i < state.workouts.value.length; i++) {
-    if (state.workouts.value[i] === workout) {
-      if (i < state.workouts.value.length - 1) {
-        let t = state.workouts.value[i+1]
-        state.workouts.value[i+1] = state.workouts.value[i]
-        state.workouts.value[i] = t
+  for (let i = 0; i < state.currentWorkouts.value.length; i++) {
+    if (state.currentWorkouts.value[i] === workout) {
+      if (i < state.currentWorkouts.value.length - 1) {
+        let t = state.currentWorkouts.value[i+1]
+        state.currentWorkouts.value[i+1] = state.currentWorkouts.value[i]
+        state.currentWorkouts.value[i] = t
       }
       break
     }
@@ -114,38 +134,40 @@ function moveWorkoutDown(workout) {
 }
 
 function moveWorkoutUp(workout) {
-  for (let i = 0; i < state.workouts.value.length; i++) {
-    if (state.workouts.value[i] === workout) {
+  for (let i = 0; i < state.currentWorkouts.value.length; i++) {
+    if (state.currentWorkouts.value[i] === workout) {
       if (i > 0) {
-        let t = state.workouts.value[i]
-        state.workouts.value[i] = state.workouts.value[i-1]
-        state.workouts.value[i-1] = t
+        let t = state.currentWorkouts.value[i]
+        state.currentWorkouts.value[i] = state.currentWorkouts.value[i-1]
+        state.currentWorkouts.value[i-1] = t
       }
       break
     }
   }
 }
 
-function openTracker(workout, source='') {
-  historical = false;
-  if (source === 'history') {
-    historical = true;
-  } 
+function openHistory() {
+  if (state.historyAltered) {
+    console.log('history altered!');
+    firebase.getHistoricalWorkouts(user.email, state.historicalWorkouts);
+    state.historyAltered = false;
+    state.page.value = types.pageTypes.History;
+  }
+}
+
+function openTracker(workout) {
+  state.prevPage = state.page.value;
   state.page.value = types.pageTypes.Tracker
   state.trackedWorkout.value = workout
 }
 
-function closeTracker() {
-  state.page.value = types.pageTypes.Home
-  // state.trackedWorkout.value = null
-}
-
 function writeCurrentWorkouts() {
-  firebase.writeCurrentWorkouts(user.email, state.workouts.value);
+  firebase.writeCurrentWorkouts(user.email, state.currentWorkouts.value);
 }
 
 function writeWorkoutToHistory() {
   firebase.writeWorkoutToHistory(user.email, state.trackedWorkout.value);
+  state.historyAltered = true;
 }
 
 function signout() {
@@ -157,27 +179,33 @@ function signout() {
 <template>
   <div class="container">
     <Home v-if="state.page.value === types.pageTypes.Home"
-        :workouts="state.workouts.value" 
-        :user="user"
-        @add-workout="addWorkout" 
-        @click-workout="openTracker"
-        @del-workout="delWorkout"
-        @move-workout-up="moveWorkoutUp"
-        @move-workout-down="moveWorkoutDown" 
-        @signout="signout"
-        @save-workouts="writeCurrentWorkouts"
+      :workouts="state.currentWorkouts.value" 
+      :user="user"
+      @add-workout="addWorkout" 
+      @click-workout="openTracker"
+      @del-workout="delWorkout"
+      @move-workout-up="moveWorkoutUp"
+      @move-workout-down="moveWorkoutDown" 
+      @signout="signout"
+      @save-workouts="writeCurrentWorkouts"
+      @open-history="openHistory"
     />
     <Tracker v-else-if="state.page.value === types.pageTypes.Tracker"
-        :workout = "state.trackedWorkout.value"
-        :historical="historical"
-        @click-back="closeTracker"
-        @add-exercise="addExercise"
-        @del-exercise="delExercise"
-        @move-exercise-up="moveExerciseUp"
-        @move-exercise-down="moveExerciseDown"
-        @add-set="addSet"
-        @del-set="delSet"
-        @save-to-history="writeWorkoutToHistory"
+      :workout = "state.trackedWorkout.value"
+      :historical="state.trackedIsHistorical"
+      @close-tracker="closeTracker"
+      @add-exercise="addExercise"
+      @del-exercise="delExercise"
+      @move-exercise-up="moveExerciseUp"
+      @move-exercise-down="moveExerciseDown"
+      @add-set="addSet"
+      @del-set="delSet"
+      @save-to-history="writeWorkoutToHistory"
+    />
+    <History v-else
+      :workouts="state.historicalWorkouts.value"
+      @close-history="closeHistory"
+      @openTracker="openTracker"
     />
   </div>
 </template>

@@ -43,15 +43,32 @@ export function initAuthObserver(vueUser) {
     });
 }
 
-export async function getCurrentWorkouts(email, workouts) {
+export async function getCurrentWorkouts(email, target) {
     if (email) {
         const docRef = doc(db, email, types._docNameCurrent);
         await getDoc(docRef)
             .then((docSnap) => {
                 if (docSnap.exists()) {
-                    workouts.value = docSnap.data().workouts;
+                    target.value = docSnap.data().workouts;
                 } else {
                     console.log("No current workouts!");
+                }
+            })
+            .catch((err) => {
+                console.error('get doc: ', err);
+            })
+    }
+}
+
+export async function getHistoricalWorkouts(email, target) {
+    if (email) {
+        const docRef = doc(db, email, types._docNameHistory);
+        await getDoc(docRef)
+            .then((docSnap) => {
+                if (docSnap.exists()) {
+                    target.value = docSnap.data().workouts;
+                } else {
+                    console.log("No historical workouts!");
                 }
             })
             .catch((err) => {
