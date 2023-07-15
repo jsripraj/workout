@@ -14,7 +14,7 @@ const state = {
     page: ref(types.pageTypes.Home),
     workouts: ref([]),
     trackedWorkout: ref({}),
-    trackedIsHistorical: false,
+    prevPage: types.pageTypes.Home, // so Tracker knows where to go back to 
     historyAltered: true,
 }
 
@@ -62,7 +62,7 @@ function closeHistory() {
 }
 
 function closeTracker() {
-  state.page.value = types.pageTypes.Home
+  state.page.value = state.prevPage;
 }
 
 function delExercise(exercise) {
@@ -136,14 +136,15 @@ function moveWorkoutUp(workout) {
 }
 
 function openHistory() {
+  if (state.historyAltered) {
+    // populate history from firebase
+  }
+  state.historyAltered = false;
   state.page.value = types.pageTypes.History;
 }
 
-function openTracker(workout, source='') {
-  state.trackedIsHistorical = false;
-  if (source === 'history') {
-    state.trackedIsHistorical = true;
-  } 
+function openTracker(workout) {
+  state.prevPage = state.page.value;
   state.page.value = types.pageTypes.Tracker
   state.trackedWorkout.value = workout
 }
