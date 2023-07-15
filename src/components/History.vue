@@ -2,36 +2,17 @@
 
 import { ref, computed } from 'vue'
 
-const props = defineProps(['workouts', 'user']);
+// const props = defineProps(['workouts', 'user']);
 
 const emit = defineEmits([
-  'addWorkout', 
-  'clickWorkout', 
-  'delWorkout', 
-  'moveWorkoutUp', 
-  'moveWorkoutDown',
-  'signout',
-  'saveWorkouts',
-])
-
-const editing = ref(false)
-
-const newWorkout = ref('')
-
-const editBtnMsg = computed(() => {
-  return editing.value ? 'Save' : 'Edit Workouts'
-});
-
-function addWorkout() {
-    const value = newWorkout.value
-    emit('addWorkout', value)
-    newWorkout.value = ''
-}
-
-function saveWorkouts() {
-  editing.value = false;
-  emit('saveWorkouts');
-}
+//   'addWorkout', 
+//   'clickWorkout', 
+//   'delWorkout', 
+//   'moveWorkoutUp', 
+//   'moveWorkoutDown',
+//   'signout',
+//   'saveWorkouts',
+]);
 </script>
 
 <template>

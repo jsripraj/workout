@@ -3,6 +3,7 @@ import { ref, reactive, watch } from 'vue'
 
 import Home from './components/Home.vue'
 import Tracker from './components/Tracker.vue'
+import History from './components/History.vue'
 import * as firebase from '/src/firebase.js';
 import * as types from '/src/types.js';
 
@@ -54,6 +55,11 @@ function addWorkout(woName) {
     })
     writeCurrentWorkouts();
   }
+}
+
+function closeTracker() {
+  state.page.value = types.pageTypes.Home
+  // state.trackedWorkout.value = null
 }
 
 function delExercise(exercise) {
@@ -135,11 +141,6 @@ function openTracker(workout, source='') {
   state.trackedWorkout.value = workout
 }
 
-function closeTracker() {
-  state.page.value = types.pageTypes.Home
-  // state.trackedWorkout.value = null
-}
-
 function writeCurrentWorkouts() {
   firebase.writeCurrentWorkouts(user.email, state.workouts.value);
 }
@@ -178,6 +179,8 @@ function signout() {
         @add-set="addSet"
         @del-set="delSet"
         @save-to-history="writeWorkoutToHistory"
+    />
+    <History v-else
     />
   </div>
 </template>
