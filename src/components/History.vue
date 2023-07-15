@@ -2,10 +2,11 @@
 
 import { ref, computed } from 'vue'
 
-// const props = defineProps(['workouts', 'user']);
+const props = defineProps(['workouts']);
 
 const emit = defineEmits([
     'close-history',
+    'openTracker',
 ]);
 </script>
 
@@ -30,9 +31,9 @@ const emit = defineEmits([
 
       <div class="row">
         <div class="col">
-          <!-- <div v-for="workout in workouts">
-            <h2 @click="$emit('clickWorkout', workout)">{{ workout.name }}</h2>
-          </div> -->
+          <div v-for="workout in workouts">
+            <h2 @click="$emit('openTracker', workout)">{{ workout.name }}</h2>
+          </div>
         </div>
       </div>
     </div>
