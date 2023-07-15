@@ -20,10 +20,7 @@ const state = {
 }
 
 watch(state.historicalWorkouts, (workouts, _) => {
-    console.log(`before sort: ${state.historicalWorkouts.value}`);
-    // Sort workouts so most-recent is first
     state.historicalWorkouts.value.sort((workoutA, workoutB) => {
-      console.log(`workoutA.date = ${workoutA.date}`);
       return workoutB.date.toDate().getTime() - workoutA.date.toDate().getTime();
     });
     console.log(`after sort: ${state.historicalWorkouts.value}`);
