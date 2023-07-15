@@ -86,7 +86,7 @@ export async function getHistoricalWorkouts(email, target) {
     }
 }
 
-export async function writeCurrentWorkouts(email, data) {
+export async function setCurrentWorkouts(email, data) {
     try {
         await setDoc(doc(db, email, types._docNameCurrent), {
             workouts: data
@@ -96,7 +96,7 @@ export async function writeCurrentWorkouts(email, data) {
     }
 }
 
-export async function writeWorkoutToHistory(email, cached, workout) {
+export async function addWorkoutToHistory(email, cached, workout) {
     const docRef = doc(db, email, types._docNameHistory);
     await updateDoc(docRef, {workouts: arrayRemove(cached)})
         .then(async () => {

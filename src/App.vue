@@ -61,7 +61,7 @@ function addWorkout(woName) {
       description: "Sample description",
       exercises: [],
     })
-    writeCurrentWorkouts();
+    setCurrentWorkouts();
   }
 }
 
@@ -164,12 +164,12 @@ function openTracker(workout) {
   state.trackedWorkout.value = workout
 }
 
-function writeCurrentWorkouts() {
-  firebase.writeCurrentWorkouts(user.email, state.currentWorkouts.value);
+function setCurrentWorkouts() {
+  firebase.setCurrentWorkouts(user.email, state.currentWorkouts.value);
 }
 
-function writeWorkoutToHistory() {
-  firebase.writeWorkoutToHistory(user.email, state.cachedWorkout, state.trackedWorkout.value);
+function addWorkoutToHistory() {
+  firebase.addWorkoutToHistory(user.email, state.cachedWorkout, state.trackedWorkout.value);
   state.historyAltered = true;
 }
 
@@ -190,7 +190,7 @@ function signout() {
       @move-workout-up="moveWorkoutUp"
       @move-workout-down="moveWorkoutDown" 
       @signout="signout"
-      @save-workouts="writeCurrentWorkouts"
+      @save-workouts="setCurrentWorkouts"
       @open-history="openHistory"
     />
     <Tracker v-else-if="state.page.value === types.pageTypes.Tracker"
@@ -203,7 +203,7 @@ function signout() {
       @move-exercise-down="moveExerciseDown"
       @add-set="addSet"
       @del-set="delSet"
-      @save-to-history="writeWorkoutToHistory"
+      @save-to-history="addWorkoutToHistory"
     />
     <History v-else
       :workouts="state.historicalWorkouts.value"
