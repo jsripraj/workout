@@ -18,11 +18,13 @@
     'setHistory',
   ])
 
-  const selectedYear = ref(types._startYear);
+  const selectedYear = ref(props.workout.date.getFullYear());
 
-  const selectedMonth = ref('January');
+  const selectedMonth = ref([...Object.keys(types._months)].find((name) => {
+    return types._months[name] === props.workout.date.getMonth();
+  }))
 
-  const selectedDay = ref(1);
+  const selectedDay = ref(props.workout.date.getDate());
 
   const editing = ref(false)
 
@@ -45,9 +47,13 @@
   }
 
   function getDays() {
+    console.log(`selectedMonth.value = ${JSON.stringify(selectedMonth)}`);
     const year = selectedYear.value;
     const month = types._months[selectedMonth.value];
-    const numDaysInMonth = new Date(year, month+1, 0).getDate(); 
+    let numDaysInMonth = 31;
+    if (month < 11) {
+      numDaysInMonth = new Date(year, month+1, 0).getDate(); 
+    }
     return [...Array(numDaysInMonth).keys()].map(d => d+1);
   }
 
