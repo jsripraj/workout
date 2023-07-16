@@ -18,7 +18,8 @@
     'setHistory',
   ])
 
-  const selectedYear = ref(types._startYear);
+  // const selectedYear = ref(types._startYear);
+  const selectedYear = ref(props.workout.date.getFullYear());
 
   const selectedMonth = ref('January');
 
