@@ -106,7 +106,6 @@ export async function addWorkoutToHistory(email, workout) {
 }
 
 export async function setHistory(email, workouts) {
-    // console.log(`called setHistory with workouts = ${JSON.stringify(workouts)}`);
     try {
         await setDoc(doc(db, email, types._docNameHistory), {
             workouts: workouts
