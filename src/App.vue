@@ -14,7 +14,6 @@ const state = {
     page: ref(types.pageTypes.Home),
     currentWorkouts: ref([]),
     trackedWorkout: ref({}),
-    cachedWorkout: {},
     prevPage: types.pageTypes.Home, // so Tracker knows where to go back to 
     historyAltered: true,
     historicalWorkouts: ref([]),
@@ -71,11 +70,11 @@ function closeHistory() {
 
 function closeTracker() {
   if (state.prevPage === types.pageTypes.History) {
-
+    openHistory();
   } else {
+    state.page.value = state.prevPage;
 
   }
-  state.page.value = state.prevPage;
 }
 
 function delExercise(exercise) {
@@ -150,17 +149,16 @@ function moveWorkoutUp(workout) {
 
 function openHistory() {
   if (state.historyAltered) {
-    console.log('history altered!');
     firebase.getHistoricalWorkouts(user.email, state.historicalWorkouts);
     state.historyAltered = false;
-    state.page.value = types.pageTypes.History;
   }
+  state.page.value = types.pageTypes.History;
 }
 
 function openTracker(workout) {
-  state.cachedWorkout = JSON.parse(JSON.stringify(workout));
   state.prevPage = state.page.value;
   state.page.value = types.pageTypes.Tracker
+  console.log(`prevPage = ${state.prevPage}, page = ${state.page.value}`);
   state.trackedWorkout.value = workout
 }
 
@@ -169,7 +167,12 @@ function setCurrentWorkouts() {
 }
 
 function addWorkoutToHistory() {
-  firebase.addWorkoutToHistory(user.email, state.cachedWorkout, state.trackedWorkout.value);
+  firebase.addWorkoutToHistory(user.email, state.trackedWorkout.value);
+  state.historyAltered = true;
+}
+
+function setHistory() {
+  firebase.setHistory(user.email, state.historicalWorkouts.value);
   state.historyAltered = true;
 }
 
@@ -196,6 +199,7 @@ function signout() {
     <Tracker v-else-if="state.page.value === types.pageTypes.Tracker"
       :workout = "state.trackedWorkout.value"
       :historical="state.trackedIsHistorical"
+      :prevpage="state.prevPage"
       @close-tracker="closeTracker"
       @add-exercise="addExercise"
       @del-exercise="delExercise"
@@ -203,7 +207,8 @@ function signout() {
       @move-exercise-down="moveExerciseDown"
       @add-set="addSet"
       @del-set="delSet"
-      @save-to-history="addWorkoutToHistory"
+      @add-workout-to-history="addWorkoutToHistory"
+      @set-history="setHistory"
     />
     <History v-else
       :workouts="state.historicalWorkouts.value"

@@ -2,7 +2,6 @@
 
 import { Timestamp } from 'firebase/firestore/lite';
 import { ref, computed } from 'vue'
-import { writeWorkoutToHistory } from '../firebase';
 
 const props = defineProps(['workouts']);
 
@@ -13,9 +12,7 @@ const emit = defineEmits([
 
 // TODO: Does this work?
 function getDate(workout) {
-    console.log(`before, workout.date = ${JSON.stringify(workout.date)}`);
     const date = workout.date;
-    console.log(`after: date = ${date}`);
     return (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
 }
 

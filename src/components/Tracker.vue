@@ -4,7 +4,7 @@
 
   import * as types from '/src/types.js';
 
-  const props = defineProps(['workout', 'historical']);
+  const props = defineProps(['workout', 'prevpage']);
 
   const emit = defineEmits([
     'close-tracker', 
@@ -14,7 +14,8 @@
     'moveExerciseDown',
     'addSet',
     'delSet',
-    'saveToHistory',
+    'addWorkoutToHistory',
+    'setHistory',
   ])
 
   const selectedYear = ref(types._startYear);
@@ -52,7 +53,13 @@
 
   function saveToHistory() {
     props.workout.date = new Date(selectedYear.value, types._months[selectedMonth.value], selectedDay.value);
-    emit('saveToHistory');
+    if (props.prevpage === types.pageTypes.Home) {
+      emit('addWorkoutToHistory');
+    } else if (props.prevpage === types.pageTypes.History) {
+      console.log(`prev-page is history`);
+      emit('setHistory');
+    }
+    emit('close-tracker');
   }
 
   function today() {
@@ -175,7 +182,7 @@
         <button @click="editing = !editing">{{ editBtnMsg }}</button>
       </div>
       <div class="row">
-        <button @click="saveToHistory(); $emit('close-tracker')">Save to History</button>
+        <button @click="saveToHistory">Save to History</button>
       </div>
     </section>
   </div>

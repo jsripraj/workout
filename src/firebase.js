@@ -96,16 +96,24 @@ export async function setCurrentWorkouts(email, data) {
     }
 }
 
-export async function addWorkoutToHistory(email, cached, workout) {
+export async function addWorkoutToHistory(email, workout) {
     const docRef = doc(db, email, types._docNameHistory);
-    await updateDoc(docRef, {workouts: arrayRemove(cached)})
-        .then(async () => {
-            await updateDoc(docRef, {workouts: arrayUnion(workout)})
-        })
+    await updateDoc(docRef, {workouts: arrayUnion(workout)})
         .catch(async () => {
             await setDoc(docRef, {workouts: arrayUnion(workout)})
         })
         .catch((err) => {console.error("update history doc: ", err)})
+}
+
+export async function setHistory(email, workouts) {
+    // console.log(`called setHistory with workouts = ${JSON.stringify(workouts)}`);
+    try {
+        await setDoc(doc(db, email, types._docNameHistory), {
+            workouts: workouts
+        });
+    } catch (err) {
+        console.error("set doc: ", err);
+    }
 }
 
 export function signout() {
