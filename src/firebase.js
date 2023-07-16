@@ -6,7 +6,6 @@ import {
     getDoc,
     updateDoc,
     arrayUnion,
-    arrayRemove,
 } from 'firebase/firestore/lite';
 import { 
     GoogleAuthProvider,
@@ -42,7 +41,6 @@ export function initAuthObserver(vueUser) {
         if (user) {
             vueUser.email = user.email;
             vueUser.displayName = user.displayName;
-            console.log(`signed in. email: ${user.email}, displayName: ${user.displayName}`);
         } else {
             const provider = new GoogleAuthProvider();
             await signInWithRedirect(auth, provider)

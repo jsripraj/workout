@@ -47,7 +47,6 @@
   }
 
   function getDays() {
-    console.log(`selectedMonth.value = ${JSON.stringify(selectedMonth)}`);
     const year = selectedYear.value;
     const month = types._months[selectedMonth.value];
     let numDaysInMonth = 31;

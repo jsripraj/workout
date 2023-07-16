@@ -158,7 +158,6 @@ function openHistory() {
 function openTracker(workout) {
   state.prevPage = state.page.value;
   state.page.value = types.pageTypes.Tracker
-  console.log(`prevPage = ${state.prevPage}, page = ${state.page.value}`);
   state.trackedWorkout.value = workout
 }
 
