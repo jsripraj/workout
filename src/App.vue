@@ -182,37 +182,35 @@ function signout() {
 </script>
 
 <template>
-  <div class="container">
-    <Home v-if="state.page.value === types.pageTypes.Home"
-      :workouts="state.currentWorkouts.value" 
-      :user="user"
-      @add-workout="addWorkout" 
-      @click-workout="openTracker"
-      @del-workout="delWorkout"
-      @move-workout-up="moveWorkoutUp"
-      @move-workout-down="moveWorkoutDown" 
-      @signout="signout"
-      @save-workouts="setCurrentWorkouts"
-      @open-history="openHistory"
-    />
-    <Tracker v-else-if="state.page.value === types.pageTypes.Tracker"
-      :workout = "state.trackedWorkout.value"
-      :historical="state.trackedIsHistorical"
-      :prevpage="state.prevPage"
-      @close-tracker="closeTracker"
-      @add-exercise="addExercise"
-      @del-exercise="delExercise"
-      @move-exercise-up="moveExerciseUp"
-      @move-exercise-down="moveExerciseDown"
-      @add-set="addSet"
-      @del-set="delSet"
-      @add-workout-to-history="addWorkoutToHistory"
-      @set-history="setHistory"
-    />
-    <History v-else
-      :workouts="state.historicalWorkouts.value"
-      @close-history="closeHistory"
-      @openTracker="openTracker"
-    />
-  </div>
+  <Home v-if="state.page.value === types.pageTypes.Home"
+    :workouts="state.currentWorkouts.value" 
+    :user="user"
+    @add-workout="addWorkout" 
+    @click-workout="openTracker"
+    @del-workout="delWorkout"
+    @move-workout-up="moveWorkoutUp"
+    @move-workout-down="moveWorkoutDown" 
+    @signout="signout"
+    @save-workouts="setCurrentWorkouts"
+    @open-history="openHistory"
+  />
+  <Tracker v-else-if="state.page.value === types.pageTypes.Tracker"
+    :workout = "state.trackedWorkout.value"
+    :historical="state.trackedIsHistorical"
+    :prevpage="state.prevPage"
+    @close-tracker="closeTracker"
+    @add-exercise="addExercise"
+    @del-exercise="delExercise"
+    @move-exercise-up="moveExerciseUp"
+    @move-exercise-down="moveExerciseDown"
+    @add-set="addSet"
+    @del-set="delSet"
+    @add-workout-to-history="addWorkoutToHistory"
+    @set-history="setHistory"
+  />
+  <History v-else
+    :workouts="state.historicalWorkouts.value"
+    @close-history="closeHistory"
+    @openTracker="openTracker"
+  />
 </template>
