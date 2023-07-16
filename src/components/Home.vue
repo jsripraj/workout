@@ -43,7 +43,7 @@ function saveWorkouts() {
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0 justify-content-end">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
             <div @click="$emit('openHistory')" class="nav-link" aria-current="page">History</div>
           </li>
@@ -70,7 +70,7 @@ function saveWorkouts() {
         <div class="col">
           <div v-for="workout in workouts">
             <div v-if="editing" class="input-group">
-              <input v-model="workout.name" type="text" class="form-control">
+              <input v-model="workout.name" type="text" class="form-control" name="workout">
               <button type="button" class="btn btn-secondary" @click="$emit('moveWorkoutUp', workout)">
                 <img src="/assets/icons/arrow-up-circle-fill.svg" alt="Move Up">
               </button>
@@ -92,7 +92,7 @@ function saveWorkouts() {
       <div class="row">
         <div class="col">
           <div class="input-group mb-3" data-bs-theme="dark">
-            <input type="text" class="form-control" placeholder="Add a workout" v-model="newWorkout" @keyup.enter="addWorkout">
+            <input type="text" class="form-control" placeholder="Add a workout" v-model="newWorkout" @keyup.enter="addWorkout" name="add">
             <button class="btn btn-outline-light" type="button" @click="addWorkout">+</button>
           </div>
         </div>

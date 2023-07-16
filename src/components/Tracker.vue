@@ -85,32 +85,44 @@
 </script>
 
 <template>
-  <div class="container text-center mt-5">
-    <div class="position-absolute top-0 start-0 ms-3" data-bs-theme="dark">
-      <button  
-        type="button" 
-        class="btn-close position-relative top-0 start-0 mt-3" 
-        aria-label="CLose" 
-        @click="closeTracker">
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <div class="navbar-brand" @click="closeTracker">
+        <img src="/assets/icons/arrow-left.svg" width="30" height="24" class="d-inline-block align-text-top">
+      </div>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
       </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <div @click="saveToHistory" class="nav-link" aria-current="page">Save Workout to History</div>
+          </li>
+          <li class="nav-item">
+            <div @click="editing = true" class="nav-link" aria-current="page">Edit Exercises</div>
+          </li>
+        </ul>
+      </div>
     </div>
+  </nav>  
+  <div class="container text-center mt-3">
       <p class="display-2">{{ workout.name }}</p>
       <div class="row">
         <div class="col">
           <button @click="today()" type="button" class="btn btn-light">Today</button>
         </div>
         <div class="col">
-          <select v-model="selectedMonth" class="form-select">
+          <select v-model="selectedMonth" class="form-select" name="month">
             <option v-for="month in Object.keys(types._months)">{{ month }}</option>
           </select>
         </div>
         <div class="col">
-          <select v-model="selectedDay" class="form-select">
+          <select v-model="selectedDay" class="form-select" name="date">
             <option v-for="day in getDays()">{{ day }}</option>
           </select>
         </div>
         <div class="col">
-          <select v-model="selectedYear" class="form-select">
+          <select v-model="selectedYear" class="form-select" name="year">
             <option v-for="year in getYears()">{{ year }}</option>
           </select>
         </div>
@@ -127,7 +139,7 @@
       >
         <div class="card-body">
           <div v-if="editing" class="input-group">
-            <input v-model="x.name" type="text" class="form-control">
+            <input v-model="x.name" type="text" class="form-control" name="exercise">
             <button type="button" class="btn btn-outline-primary" @click="$emit('moveExerciseUp', x)">
               <img src="/assets/icons/arrow-up-circle-fill.svg" alt="Move Up">
             </button>
@@ -183,15 +195,12 @@
         </div>
       </div>
       <div class="input-group mb-3">
-        <input type="text" class="form-control" placeholder="Add an exercise" v-model="newExercise" @keyup.enter="addExercise">
+        <input type="text" class="form-control" placeholder="Add an exercise" v-model="newExercise" @keyup.enter="addExercise" name="add">
         <button class="btn btn-outline-primary" type="button" @click="addExercise">+</button>
       </div>
 
       <div class="row">
-        <button @click="editing = !editing">{{ editBtnMsg }}</button>
-      </div>
-      <div class="row">
-        <button @click="saveToHistory">Save to History</button>
+        <button @click="editing = false">Done</button>
       </div>
     </section>
   </div>
