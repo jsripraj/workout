@@ -71,9 +71,9 @@ function closeHistory() {
 function closeTracker() {
   if (state.prevPage === types.pageTypes.History) {
     openHistory();
-  } else {
-    state.page.value = state.prevPage;
-
+  } else if (state.prevPage === types.pageTypes.Home) {
+    firebase.setCurrentWorkouts(user.email, state.currentWorkouts.value);
+    state.page.value = types.pageTypes.Home;
   }
 }
 
