@@ -6,6 +6,7 @@ import {
     getDoc,
     updateDoc,
     arrayUnion,
+    arrayRemove,
 } from 'firebase/firestore/lite';
 import { 
     GoogleAuthProvider,
@@ -30,6 +31,12 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app)
 const db = getFirestore(app);
 
+function convertDates(workouts) {
+    for (let i = 0; i < workouts.length; i++) {
+        workouts[i].date = workouts[i].date.toDate();
+    }
+}
+
 export function initAuthObserver(vueUser) {
     onAuthStateChanged(auth, async (user) => {
         if (user) {
@@ -50,6 +57,7 @@ export async function getCurrentWorkouts(email, target) {
             .then((docSnap) => {
                 if (docSnap.exists()) {
                     target.value = docSnap.data().workouts;
+                    convertDates(target.value);
                 } else {
                     console.log("No current workouts!");
                 }
@@ -67,6 +75,7 @@ export async function getHistoricalWorkouts(email, target) {
             .then((docSnap) => {
                 if (docSnap.exists()) {
                     target.value = docSnap.data().workouts;
+                    convertDates(target.value);
                 } else {
                     console.log("No historical workouts!");
                 }
@@ -77,7 +86,7 @@ export async function getHistoricalWorkouts(email, target) {
     }
 }
 
-export async function writeCurrentWorkouts(email, data) {
+export async function setCurrentWorkouts(email, data) {
     try {
         await setDoc(doc(db, email, types._docNameCurrent), {
             workouts: data
@@ -87,23 +96,23 @@ export async function writeCurrentWorkouts(email, data) {
     }
 }
 
-export async function writeWorkoutToHistory(email, workout) {
+export async function addWorkoutToHistory(email, workout) {
     const docRef = doc(db, email, types._docNameHistory);
+    await updateDoc(docRef, {workouts: arrayUnion(workout)})
+        .catch(async () => {
+            await setDoc(docRef, {workouts: arrayUnion(workout)})
+        })
+        .catch((err) => {console.error("update history doc: ", err)})
+}
+
+export async function setHistory(email, workouts) {
+    // console.log(`called setHistory with workouts = ${JSON.stringify(workouts)}`);
     try {
-        await updateDoc(docRef, {workouts: arrayUnion(workout)});
+        await setDoc(doc(db, email, types._docNameHistory), {
+            workouts: workouts
+        });
     } catch (err) {
-        console.log(`in error handling`);
-        await getDoc(docRef)
-            .then(async (docSnap) => {
-                if (docSnap.exists()) {
-                    throw new Error("existing doc: ", err);
-                } else {
-                    console.log('setting doc');
-                    await setDoc(docRef, {workouts: []})
-                }
-            })
-            .then(async () => {await updateDoc(docRef, {workouts: arrayUnion(workout)})})
-            .catch((err) => {console.error("update history doc with array union: ", err)})
+        console.error("set doc: ", err);
     }
 }
 

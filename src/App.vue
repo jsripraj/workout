@@ -19,14 +19,10 @@ const state = {
     historicalWorkouts: ref([]),
 }
 
-watch(state.historicalWorkouts, (workouts, _) => {
-    console.log(`before sort: ${state.historicalWorkouts.value}`);
-    // Sort workouts so most-recent is first
+watch(state.historicalWorkouts, () => {
     state.historicalWorkouts.value.sort((workoutA, workoutB) => {
-      console.log(`workoutA.date = ${workoutA.date}`);
-      return workoutB.date.toDate().getTime() - workoutA.date.toDate().getTime();
+      return workoutB.date.getTime() - workoutA.date.getTime();
     });
-    console.log(`after sort: ${state.historicalWorkouts.value}`);
 });
 
 watch(user, (populatedUser, _) => {
@@ -64,7 +60,7 @@ function addWorkout(woName) {
       description: "Sample description",
       exercises: [],
     })
-    writeCurrentWorkouts();
+    setCurrentWorkouts();
   }
 }
 
@@ -73,7 +69,12 @@ function closeHistory() {
 }
 
 function closeTracker() {
-  state.page.value = state.prevPage;
+  if (state.prevPage === types.pageTypes.History) {
+    openHistory();
+  } else {
+    state.page.value = state.prevPage;
+
+  }
 }
 
 function delExercise(exercise) {
@@ -148,25 +149,30 @@ function moveWorkoutUp(workout) {
 
 function openHistory() {
   if (state.historyAltered) {
-    console.log('history altered!');
     firebase.getHistoricalWorkouts(user.email, state.historicalWorkouts);
     state.historyAltered = false;
-    state.page.value = types.pageTypes.History;
   }
+  state.page.value = types.pageTypes.History;
 }
 
 function openTracker(workout) {
   state.prevPage = state.page.value;
   state.page.value = types.pageTypes.Tracker
+  console.log(`prevPage = ${state.prevPage}, page = ${state.page.value}`);
   state.trackedWorkout.value = workout
 }
 
-function writeCurrentWorkouts() {
-  firebase.writeCurrentWorkouts(user.email, state.currentWorkouts.value);
+function setCurrentWorkouts() {
+  firebase.setCurrentWorkouts(user.email, state.currentWorkouts.value);
 }
 
-function writeWorkoutToHistory() {
-  firebase.writeWorkoutToHistory(user.email, state.trackedWorkout.value);
+function addWorkoutToHistory() {
+  firebase.addWorkoutToHistory(user.email, state.trackedWorkout.value);
+  state.historyAltered = true;
+}
+
+function setHistory() {
+  firebase.setHistory(user.email, state.historicalWorkouts.value);
   state.historyAltered = true;
 }
 
@@ -187,12 +193,13 @@ function signout() {
       @move-workout-up="moveWorkoutUp"
       @move-workout-down="moveWorkoutDown" 
       @signout="signout"
-      @save-workouts="writeCurrentWorkouts"
+      @save-workouts="setCurrentWorkouts"
       @open-history="openHistory"
     />
     <Tracker v-else-if="state.page.value === types.pageTypes.Tracker"
       :workout = "state.trackedWorkout.value"
       :historical="state.trackedIsHistorical"
+      :prevpage="state.prevPage"
       @close-tracker="closeTracker"
       @add-exercise="addExercise"
       @del-exercise="delExercise"
@@ -200,7 +207,8 @@ function signout() {
       @move-exercise-down="moveExerciseDown"
       @add-set="addSet"
       @del-set="delSet"
-      @save-to-history="writeWorkoutToHistory"
+      @add-workout-to-history="addWorkoutToHistory"
+      @set-history="setHistory"
     />
     <History v-else
       :workouts="state.historicalWorkouts.value"
