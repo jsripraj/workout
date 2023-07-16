@@ -71,13 +71,13 @@ function saveWorkouts() {
           <div v-for="workout in workouts">
             <div v-if="editing" class="input-group">
               <input v-model="workout.name" type="text" class="form-control" name="workout">
-              <button type="button" class="btn btn-light" @click="$emit('moveWorkoutUp', workout)">
+              <button type="button" class="btn btn-light border border-secondary-subtle" @click="$emit('moveWorkoutUp', workout)">
                 <img src="/assets/icons/arrow-up.svg" alt="Move Up">
               </button>
-              <button type="button" class="btn btn-light" @click="$emit('moveWorkoutDown', workout)">
+              <button type="button" class="btn btn-light border border-secondary-subtle" @click="$emit('moveWorkoutDown', workout)">
                 <img src="/assets/icons/arrow-down.svg" alt="Move Down">
               </button>
-              <button type="button" class="btn btn-light" @click="$emit('delWorkout', workout)">
+              <button type="button" class="btn btn-light border border-secondary-subtle" @click="$emit('delWorkout', workout)">
                 <img src="/assets/icons/x-lg.svg" alt="Delete">
               </button>
             </div>
