@@ -71,9 +71,9 @@ function closeHistory() {
 function closeTracker() {
   if (state.prevPage === types.pageTypes.History) {
     openHistory();
-  } else {
-    state.page.value = state.prevPage;
-
+  } else if (state.prevPage === types.pageTypes.Home) {
+    firebase.setCurrentWorkouts(user.email, state.currentWorkouts.value);
+    state.page.value = types.pageTypes.Home;
   }
 }
 
@@ -158,7 +158,6 @@ function openHistory() {
 function openTracker(workout) {
   state.prevPage = state.page.value;
   state.page.value = types.pageTypes.Tracker
-  console.log(`prevPage = ${state.prevPage}, page = ${state.page.value}`);
   state.trackedWorkout.value = workout
 }
 
