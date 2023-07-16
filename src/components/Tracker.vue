@@ -140,14 +140,14 @@
         <div class="card-body">
           <div v-if="editing" class="input-group">
             <input v-model="x.name" type="text" class="form-control" name="exercise">
-            <button type="button" class="btn btn-outline-primary" @click="$emit('moveExerciseUp', x)">
-              <img src="/assets/icons/arrow-up-circle-fill.svg" alt="Move Up">
+            <button type="button" class="btn btn-outline-secondary" @click="$emit('moveExerciseUp', x)">
+              <img src="/assets/icons/arrow-up.svg" alt="Move Up">
             </button>
-            <button type="button" class="btn btn-outline-primary" @click="$emit('moveExerciseDown', x)">
-              <img src="/assets/icons/arrow-down-circle-fill.svg" alt="Move Down">
+            <button type="button" class="btn btn-outline-secondary" @click="$emit('moveExerciseDown', x)">
+              <img src="/assets/icons/arrow-down.svg" alt="Move Down">
             </button>
-            <button type="button" class="btn btn-outline-primary" @click="$emit('delExercise', x)">
-              <img src="/assets/icons/x-circle-fill.svg" alt="Delete">
+            <button type="button" class="btn btn-outline-secondary" @click="$emit('delExercise', x)">
+              <img src="/assets/icons/x-lg.svg" alt="Delete">
             </button>
           </div>
           <div v-else>
@@ -196,11 +196,11 @@
       </div>
       <div class="input-group mb-3">
         <input type="text" class="form-control" placeholder="Add an exercise" v-model="newExercise" @keyup.enter="addExercise" name="add">
-        <button class="btn btn-outline-primary" type="button" @click="addExercise">+</button>
+        <button class="btn btn-light" type="button" @click="addExercise">+</button>
       </div>
 
       <div class="row">
-        <button @click="editing = false">Done</button>
+        <button v-if="editing" type="button" class="btn btn-warning" @click="editing = false">Save</button>
       </div>
     </section>
   </div>
