@@ -72,12 +72,12 @@
     emit('close-tracker');
   }
 
-  function today() {
-    const now = new Date();
-    selectedYear.value = now.getFullYear();
-    selectedMonth.value = Object.keys(types._months).find(key => types._months[key] === now.getMonth());
-    selectedDay.value = now.getDate();
-  }
+  // function today() {
+  //   const now = new Date();
+  //   selectedYear.value = now.getFullYear();
+  //   selectedMonth.value = Object.keys(types._months).find(key => types._months[key] === now.getMonth());
+  //   selectedDay.value = now.getDate();
+  // }
 
   function updateDate() {
     props.workout.date = new Date(selectedYear.value, types._months[selectedMonth.value], selectedDay.value);
@@ -108,20 +108,20 @@
   <div class="container text-center mt-3">
       <p class="display-2">{{ workout.name }}</p>
       <div class="row">
-        <div class="col">
+        <!-- <div class="col">
           <button @click="today()" type="button" class="btn btn-light">Today</button>
-        </div>
+        </div> -->
         <div class="col">
           <select v-model="selectedMonth" class="form-select" name="month">
             <option v-for="month in Object.keys(types._months)">{{ month }}</option>
           </select>
         </div>
-        <div class="col">
+        <div class="col-3">
           <select v-model="selectedDay" class="form-select" name="date">
             <option v-for="day in getDays()">{{ day }}</option>
           </select>
         </div>
-        <div class="col">
+        <div class="col-4">
           <select v-model="selectedYear" class="form-select" name="year">
             <option v-for="year in getYears()">{{ year }}</option>
           </select>
