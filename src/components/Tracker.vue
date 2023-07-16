@@ -94,24 +94,18 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0 justify-content-end">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <div @click="$emit('openHistory')" class="nav-link" aria-current="page">History</div>
+            <div @click="saveToHistory" class="nav-link" aria-current="page">Save Workout to History</div>
           </li>
           <li class="nav-item">
-            <div @click="editing = true" class="nav-link" aria-current="page">Edit Workouts</div>
-          </li>
-          <li class="nav-item">
-            <div @click="$emit('signout')" class="nav-link" aria-current="page">Sign Out</div>
+            <div @click="editing = true" class="nav-link" aria-current="page">Edit Exercises</div>
           </li>
         </ul>
       </div>
     </div>
   </nav>  
-
-
-
-  <div class="container text-center mt-5">
+  <div class="container text-center mt-3">
       <p class="display-2">{{ workout.name }}</p>
       <div class="row">
         <div class="col">
@@ -206,10 +200,7 @@
       </div>
 
       <div class="row">
-        <button @click="editing = !editing">{{ editBtnMsg }}</button>
-      </div>
-      <div class="row">
-        <button @click="saveToHistory">Save to History</button>
+        <button @click="editing = false">Done</button>
       </div>
     </section>
   </div>

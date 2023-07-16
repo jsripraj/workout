@@ -43,7 +43,7 @@ function saveWorkouts() {
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0 justify-content-end">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
             <div @click="$emit('openHistory')" class="nav-link" aria-current="page">History</div>
           </li>
