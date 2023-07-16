@@ -115,15 +115,10 @@
           </select>
         </div>
       </div>
-      <div v-if="editing">
-        <input
-          type="text"
-          placeholder="Add a description"
-          v-model="workout.description"
-        >
-      </div>
-      <div v-else>
-        <p>{{ workout.description }}</p>
+      <div class="row">
+        <div class="my-3">
+          <textarea v-model="workout.description" class="form-control" id="description" rows="3" placeholder="Notes"></textarea>
+        </div>
       </div>
     <section class="main" >
       <div 
