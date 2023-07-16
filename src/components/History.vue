@@ -1,8 +1,5 @@
 <script setup>
 
-import { Timestamp } from 'firebase/firestore/lite';
-import { ref, computed } from 'vue'
-
 const props = defineProps(['workouts']);
 
 const emit = defineEmits([
@@ -10,7 +7,6 @@ const emit = defineEmits([
     'openTracker',
 ]);
 
-// TODO: Does this work?
 function getDate(workout) {
     const date = workout.date;
     return (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
