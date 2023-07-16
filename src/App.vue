@@ -196,7 +196,6 @@ function signout() {
   />
   <Tracker v-else-if="state.page.value === types.pageTypes.Tracker"
     :workout = "state.trackedWorkout.value"
-    :historical="state.trackedIsHistorical"
     :prevpage="state.prevPage"
     @close-tracker="closeTracker"
     @add-exercise="addExercise"
