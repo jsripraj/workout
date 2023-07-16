@@ -18,15 +18,13 @@
     'setHistory',
   ])
 
-  // const selectedYear = ref(types._startYear);
   const selectedYear = ref(props.workout.date.getFullYear());
 
-  // const selectedMonth = ref('January');
   const selectedMonth = ref([...Object.keys(types._months)].find((name) => {
     return types._months[name] === props.workout.date.getMonth();
   }))
 
-  const selectedDay = ref(1);
+  const selectedDay = ref(props.workout.date.getDate());
 
   const editing = ref(false)
 
