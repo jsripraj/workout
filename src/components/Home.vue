@@ -36,16 +36,29 @@ function saveWorkouts() {
 </script>
 
 <template>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <div class="navbar-brand">Hello, {{ user.displayName }}</div>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 justify-content-end">
+          <li class="nav-item">
+            <div @click="$emit('openHistory')" class="nav-link" aria-current="page">History</div>
+          </li>
+          <li class="nav-item">
+            <div @click="editing = true" class="nav-link" aria-current="page">Edit Workouts</div>
+          </li>
+          <li class="nav-item">
+            <div @click="$emit('signout')" class="nav-link" aria-current="page">Sign Out</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>  
   <div class="container text-center my-4">
     <div class="grid row-gap-5">
-      <div class="row">
-        <div class="col">
-          <p>Hello, {{ user.displayName }}</p>
-        </div>
-        <div class="col">
-          <button type="button" class="btn btn-warning" @click="$emit('signout')">Sign Out</button>
-        </div>
-      </div>
       <div class="row">
         <div class="col">
           <header class="header">
@@ -53,7 +66,6 @@ function saveWorkouts() {
           </header>
         </div>
       </div>
-
       <div class="row">
         <div class="col">
           <div v-for="workout in workouts">
@@ -85,18 +97,12 @@ function saveWorkouts() {
           </div>
         </div>
       </div>
-
       <div class="row">
         <div class="col">
-          <button v-if="!editing" type="button" class="btn btn-primary" @click="editing = !editing">{{ editBtnMsg }}</button>
           <button v-if="editing" type="button" class="btn btn-warning" @click="saveWorkouts">{{ editBtnMsg }}</button>
         </div>
       </div>
-      <div class="row">
-        <div class="col">
-          <button v-if="!editing" type="button" class="btn btn-primary" @click="$emit('openHistory')">History</button>
-        </div>
-      </div>
+
     </div>
   </div>
 </template>
