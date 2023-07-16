@@ -41,6 +41,11 @@
     newExercise.value = ''
   }
 
+  function closeTracker() {
+    updateDate();
+    emit('close-tracker');
+  }
+
   function getYears() {
     const curYear = new Date().getFullYear();
     return [...Array(curYear - types._startYear + 1).keys()].map(y => y + types._startYear).reverse();
@@ -57,7 +62,7 @@
   }
 
   function saveToHistory() {
-    props.workout.date = new Date(selectedYear.value, types._months[selectedMonth.value], selectedDay.value);
+    updateDate();
     if (props.prevpage === types.pageTypes.Home) {
       emit('addWorkoutToHistory');
     } else if (props.prevpage === types.pageTypes.History) {
@@ -73,6 +78,10 @@
     selectedMonth.value = Object.keys(types._months).find(key => types._months[key] === now.getMonth());
     selectedDay.value = now.getDate();
   }
+
+  function updateDate() {
+    props.workout.date = new Date(selectedYear.value, types._months[selectedMonth.value], selectedDay.value);
+  }
 </script>
 
 <template>
@@ -82,7 +91,7 @@
         type="button" 
         class="btn-close position-relative top-0 start-0 mt-3" 
         aria-label="CLose" 
-        @click="$emit('close-tracker')">
+        @click="closeTracker">
       </button>
     </div>
       <p class="display-2">{{ workout.name }}</p>
