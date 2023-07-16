@@ -94,7 +94,7 @@ function saveWorkouts() {
       </div>
       <div class="row">
         <div class="col">
-          <button type="button" class="btn btn-primary" @click="$emit('openHistory')">History</button>
+          <button v-if="!editing" type="button" class="btn btn-primary" @click="$emit('openHistory')">History</button>
         </div>
       </div>
     </div>
