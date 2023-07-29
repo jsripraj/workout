@@ -24,24 +24,20 @@ function getDate(workout) {
         @click="$emit('close-history')">
       </button>
     </div>
-    <div class="grid row-gap-5">
-      <div class="row">
-        <div class="col">
-          <header class="header">
-            <p class="display-1">History</p>
-          </header>
-        </div>
-      </div>
+    <div>
+      <header class="header">
+        <p class="display-1">History</p>
+      </header>
+    </div>
 
     <div v-for="workout in workouts">
-        <div class="row">
-            <div class="col">
-                <h2 @click="$emit('openTracker', workout)">{{ getDate(workout) }}</h2>
-            </div>
-            <div class="col">
-                <h2 @click="$emit('openTracker', workout)">{{ workout.name }}</h2>
-            </div>
-        </div>
+      <div class="list-group list-group-horizontal">
+        <a @click="$emit('openTracker', workout)" class="list-group-item list-group-item-action fs-1" href="#">
+          {{ getDate(workout) }}
+        </a>
+        <a @click="$emit('openTracker', workout)" class="list-group-item list-group-item-action fs-1" href="#">
+          {{ workout.name }}
+        </a>
       </div>
     </div>
   </div>

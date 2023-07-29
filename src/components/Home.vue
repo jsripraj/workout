@@ -38,20 +38,20 @@ function saveWorkouts() {
 <template>
   <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-      <div class="navbar-brand">Hello, {{ user.displayName }}</div>
+      <a class="navbar-brand">Hello, {{ user.displayName }}</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <div @click="$emit('openHistory')" class="nav-link" aria-current="page">History</div>
+            <a @click="$emit('openHistory')" class="nav-link" aria-current="page" href="#">History</a>
           </li>
           <li class="nav-item">
-            <div @click="editing = true" class="nav-link" aria-current="page">Edit Workouts</div>
+            <a @click="editing = true" class="nav-link" aria-current="page" href="#">Edit Workouts</a>
           </li>
           <li class="nav-item">
-            <div @click="$emit('signout')" class="nav-link" aria-current="page">Sign Out</div>
+            <a @click="$emit('signout')" class="nav-link" aria-current="page" href="#">Sign Out</a>
           </li>
         </ul>
       </div>
@@ -82,8 +82,8 @@ function saveWorkouts() {
               </button>
             </div>
 
-            <div v-else>
-              <h2 @click="$emit('clickWorkout', workout)">{{ workout.name }}</h2>
+            <div v-else class="list-group">
+              <a @click="$emit('clickWorkout', workout)" href="#" class="fs-2 list-group-item list-group-item-action">{{ workout.name }}</a>
             </div>
           </div>
         </div>
