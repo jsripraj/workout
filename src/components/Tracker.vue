@@ -87,19 +87,19 @@
 <template>
   <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-      <div class="navbar-brand" @click="closeTracker">
+      <a class="navbar-brand" @click="closeTracker" href="#">
         <img src="/assets/icons/arrow-left.svg" width="30" height="24" class="d-inline-block align-text-top">
-      </div>
+      </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <div @click="saveToHistory" class="nav-link" aria-current="page">Save Workout to History</div>
+            <a @click="saveToHistory" class="nav-link" aria-current="page" href="#">Save Workout to History</a>
           </li>
           <li class="nav-item">
-            <div @click="editing = true" class="nav-link" aria-current="page">Edit Exercises</div>
+            <a @click="editing = true" class="nav-link" aria-current="page" href="#">Edit Exercises</a>
           </li>
         </ul>
       </div>
